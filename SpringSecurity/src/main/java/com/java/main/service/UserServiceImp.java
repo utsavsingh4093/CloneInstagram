@@ -9,25 +9,22 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Service
-public class UserServiceImp implements UserService{
+public class UserServiceImp{
 
     @Autowired
     private UserRepository userRepository;
 
 
-    @Override
-    public boolean registerUser(User user) {
+    public User registerUser(User user) throws IOException {
         try {
-            userRepository.save(user);
-            return true;
-
+            return userRepository.save(user);
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            e.printStackTrace(); // Log the error
+            throw new RuntimeException("Error saving user to the database.");
         }
     }
 
-    @Override
+
     public User loginUser(String email, String password) {
           User validUser=userRepository.findByEmail(email);
           if(validUser!=null && validUser.getPassword().equals(password)){

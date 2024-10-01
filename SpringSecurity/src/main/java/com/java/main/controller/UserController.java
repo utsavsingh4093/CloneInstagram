@@ -1,7 +1,9 @@
 package com.java.main.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.main.entity.User;
 import com.java.main.service.UserService;
+import com.java.main.service.UserServiceImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import java.io.IOException;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImp  userServiceImp;
 
     @GetMapping("/register")
     public String openRegsitrationPage(Model model) {
@@ -34,20 +36,26 @@ public class UserController {
 
 
     @PostMapping("/regForm")
-    //ModelAttribute it use to bind the data
-    public String addUser(@ModelAttribute("user") User user,Model model) throws IOException {
-       boolean status=userService.registerUser(user);
-        if (status) {
-            model.addAttribute("successMsg", "User is Registered Successfully");
-        } else {
-            model.addAttribute("errorMsg", "User is Not Registered; something went wrong");
+    @ResponseBody
+    public String getRegisterForm(@ModelAttribute("user") User user, @RequestParam("profileImage") MultipartFile file, Model model) throws IOException {
+        if (!file.isEmpty()){
+            user.setImage_type(file.getContentType());
+            user.setImage_name(file.getOriginalFilename());
+            user.setImage_data(file.getBytes());
         }
+        User student1 = userServiceImp.registerUser(user);
+        System.out.println(student1.getFirst_name());
+        model.addAttribute("name",student1.getFirst_name()+" "+student1.getLast_name());
         return "register";
     }
 
+
+
+
+
     @PostMapping("/logForm")
     public String submitLoginForm(@ModelAttribute("user") User user, Model model) {
-        User validUser = userService.loginUser(user.getEmail(), user.getPassword());
+        User validUser = userServiceImp.loginUser(user.getEmail(), user.getPassword());
         if (validUser != null) {
             model.addAttribute("email", validUser.getEmail());
             return "home";

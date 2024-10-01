@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class User {
     private String city;
     private String state;
     private String password;
- //For adding the profile
+    //For adding the profile
     private String image_name;
     private String image_type;
     @Lob
