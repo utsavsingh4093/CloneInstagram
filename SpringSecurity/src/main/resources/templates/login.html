@@ -16,7 +16,38 @@
 <div th:if="${errorMsg}">
     <h3 style="color:red;" th:text="${errorMsg}"></h3>
 </div>
-<br><br><br>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark"><a
+        class="navbar-brand" href="#">Friend Book</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link"
+                                           href="home">Home <span class="sr-only"></span></a>
+            </li>
+
+            <li class="nav-item active"><a class="nav-link" href="register">Register<span class="sr-only"></span>
+            </a></li>
+
+            &nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa
+
+            <li class="nav-item">
+                <button
+                        style="border-radius: 29px; height: 45px; width: 100px; margin-top: 10px; padding-block-end: 22px; text-align: center;"
+                        class="btn btn-outline-danger my-2 my-sm-0 text-color-dark">
+                    <a style="color: whitesmoke; text-decoration: none;" href="login">Login</a>
+                </button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
 <h2 style="text-align: center;">Login Form</h2>
 
 <form class="container col-lg-3 " th:action="@{/logForm}" th:object="${user}" method="post">
@@ -52,4 +83,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
+<br><br><br><br>
+<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+    <div class="text-center p-4"
+         style="background-color: rgba(0, 0, 0, 0.05);">
+        Welcome to Friend Book <br> <a class="text-reset fw-bold"
+                                       href="https://mdbootstrap.com/">Email:- smartlibrary40@gmail.com</a>
+    </div>
+</footer>
 </html>

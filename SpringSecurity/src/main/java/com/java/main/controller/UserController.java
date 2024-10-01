@@ -1,14 +1,10 @@
 package com.java.main.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.main.entity.User;
-import com.java.main.service.UserService;
 import com.java.main.service.UserServiceImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +22,10 @@ public class UserController {
     public String openRegsitrationPage(Model model) {
         model.addAttribute("user", new User());//it will use to transfer the value from one page to other page
         return "register";
+    }
+    @GetMapping("/home")
+    public String openHomePage() {
+        return "home";
     }
 
     @GetMapping("/login")
@@ -46,9 +46,8 @@ public class UserController {
         User student1 = userServiceImp.registerUser(user);
         System.out.println(student1.getFirst_name());
         model.addAttribute("name",student1.getFirst_name()+" "+student1.getLast_name());
-        return "register";
+        return "redirect:/login";
     }
-
 
 
 
