@@ -4,9 +4,9 @@ import com.java.main.entity.User;
 import com.java.main.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class UserServiceImp{
@@ -33,5 +33,8 @@ public class UserServiceImp{
           return null;
     }
 
-
+    public Optional<User> getUserById(int id)
+    {
+        return userRepository.findById(id);
+    }
 }

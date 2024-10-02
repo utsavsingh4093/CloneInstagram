@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Component
@@ -19,6 +16,7 @@ public class AddPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int post_id;
+    private String post_name;
     private String caption;
     // For Adding Post
     private String image_type;
