@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,10 +33,20 @@ public class UserController {
     public String openHome() {
         return "home";
     }
-    @GetMapping("/getdata")
-    public String openHomePage() {
-        return "getdata";
+
+
+    @GetMapping("/homepage")
+    public String openHomePage(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user"); // Retrieve user from session
+        if (user != null) {
+            model.addAttribute("user", user);
+            return "homepage";
+        } else {
+            return "redirect:/login"; // Redirect to login if session expired
+        }
     }
+
+
 
     @GetMapping("/login")
     public String openLoginPage(Model model) {
@@ -57,7 +66,7 @@ public class UserController {
         User student1 = userServiceImp.registerUser(user);
         System.out.println(student1.getFirst_name());
         model.addAttribute("name",student1.getFirst_name()+" "+student1.getLast_name());
-        return "redirect:/login";
+        return "home";
     }
 
     @PostMapping("/logForm")
@@ -82,37 +91,6 @@ public class UserController {
             }
             return "redirect:/login";
         }
-//
-////    @GetMapping("/getdata/{id}")
-////    public String getUser(@PathVariable int id, Model model) {
-////        System.err.println(id);
-////        Optional<User> user = userServiceImp.getUserById(id);
-////
-////        if (user.isPresent()) {
-////            System.out.println("User found: " + user.get().getImage_name());
-////
-////            model.addAttribute("user", user.get());
-////            return "getdata"; // Thymeleaf template name
-////        } else {
-////            System.out.println("User not found with ID: " + id);
-////            return "404"; // Handle not found
-////        }
-////    }
-//
-////For Fetching a Image
-//@GetMapping("/getdata/{id}")
-//public ResponseEntity<ByteArrayResource> getUserImage(@PathVariable int id) {
-//    Optional<User> user = userServiceImp.getUserById(id);
-//    if (user.isPresent() && user.get().getImage_data() != null) {
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(user.get().getImage_type()))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + user.get().getImage_name() + "\"")
-//                .body(new ByteArrayResource(user.get().getImage_data()));
-//    } else {
-//        return ResponseEntity.notFound().build();
-//    }
-//}
-
 
     @GetMapping("/users/{id}/image")
     public ResponseEntity<ByteArrayResource> getUserImage(@PathVariable int id) {
@@ -129,13 +107,14 @@ public class UserController {
 
     // Redirect to getdata page after login
     @GetMapping("/homepage/{id}")
-    public String getUserData(@PathVariable int id, Model model) {
+    public String getUserData(@PathVariable int id, Model model,HttpSession httpSession) {
         Optional<User> user = userServiceImp.getUserById(id);
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
-            return "homepage"; // Thymeleaf template name
+            httpSession.setAttribute("user",user.get());//set user in session after reload the page
+            return "homepage";
         } else {
-            return "404"; // Handle user not found scenario
+            return "404";
         }
     }
 
