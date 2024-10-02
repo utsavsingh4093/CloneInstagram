@@ -23,6 +23,21 @@ public class UserServiceImp{
             throw new RuntimeException("Error saving user to the database.");
         }
     }
+//Update User
+public User updateUser(User user) {
+    // Basic validation
+    if (user.getFirst_name() == null || user.getFirst_name().isEmpty()) {
+        throw new IllegalArgumentException("First name is required.");
+    }
+    // Add other validation checks as needed
+
+    try {
+        return userRepository.save(user);
+    } catch (Exception e) {
+        e.printStackTrace(); // Log the stack trace for debugging
+        throw new RuntimeException("Error saving user to the database: " + e.getMessage());
+    }
+}
 
 
     public User loginUser(String email, String password) {
@@ -33,8 +48,11 @@ public class UserServiceImp{
           return null;
     }
 
-    public Optional<User> getUserById(int id)
-    {
-        return userRepository.findById(id);
+    public Optional<User> getUserById(int id) {
+        return userRepository.findById(id); // Assuming you're using JpaRepository
+    }
+
+    public User getAllProductById(int id) {
+        return userRepository.findById(id).orElse(new User());
     }
 }
