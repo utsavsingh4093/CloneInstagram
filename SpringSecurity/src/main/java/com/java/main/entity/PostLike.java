@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -15,7 +17,7 @@ public class PostLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int like_id;
-    private long count;
+    private List<Integer> likes;
 
     // Getting the data of user_id
     @OneToOne(cascade = CascadeType.ALL)

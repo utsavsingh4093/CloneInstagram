@@ -47,7 +47,7 @@
 <br>
 <h2 style="text-align: center; color: blue;">AddPost</h2>
 <div class="container col-md-6">
-  <form class="row g-3 needs-validation" th:action="@{/regForm}" th:object="${user}" method="post" enctype="multipart/form-data" novalidate>
+  <form class="row g-3 needs-validation" th:action="@{/addPostForm}" th:object="${addPost}" method="post" enctype="multipart/form-data" novalidate>
     <div class="col-md-12 position-relative">
       <label for="first_name" class="form-label">Post name</label>
       <input type="text" class="form-control" id="first_name" th:field="*{post_name}" required>

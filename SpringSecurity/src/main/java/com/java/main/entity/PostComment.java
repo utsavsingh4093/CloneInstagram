@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Data
 @Entity
 @AllArgsConstructor
@@ -15,7 +17,7 @@ public class PostComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int comment_id;
-    private String comment;
+    private List<String> comment;
 
     // This is from User Class
     @ManyToOne(cascade = CascadeType.ALL) // Change here

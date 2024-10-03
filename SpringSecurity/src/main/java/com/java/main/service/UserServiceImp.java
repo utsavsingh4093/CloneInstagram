@@ -14,6 +14,9 @@ public class UserServiceImp{
     @Autowired
     private UserRepository userRepository;
 
+    public  User getById(Integer user_id){
+        return userRepository.findById(user_id).orElse(null);
+    }
 
     public User registerUser(User user) throws IOException {
         try {

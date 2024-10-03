@@ -23,11 +23,6 @@ public class PostControllers{
     @Autowired
     UserServiceImp userServiceImp;
 
-    @GetMapping("/addPost")
-    public String getPost(Model model) {
-        model.addAttribute("user", new AddPost());
-        return "addPost"; // Ensure there is a corresponding addPost.html template
-    }
 
     @GetMapping("/view")
     public String getViewPage(Model model, HttpSession httpSession) {
@@ -92,20 +87,15 @@ public class PostControllers{
     }
 
     @PostMapping("/updateProfile")
-    @ResponseBody
     public String updateProfile(@ModelAttribute("user") User user, @RequestParam("profileImage") MultipartFile file, Model model) throws IOException {
-        if (user.getId() <= 0) { // Check if ID is valid (not <= 0)
-            throw new IllegalArgumentException("User ID must not be null for updates.");
+        if (user.getId() <= 0) {
+            throw new IllegalArgumentException("User ID must not be null for updates");
         }
-
-
         Optional<User> optionalUser = userServiceImp.getUserById(user.getId());
         if (!optionalUser.isPresent()) {
             throw new RuntimeException("User not found with id: " + user.getId());
         }
-
         User existingUser = optionalUser.get();
-
         // Update fields
         existingUser.setFirst_name(user.getFirst_name());
         existingUser.setLast_name(user.getLast_name());
@@ -129,8 +119,7 @@ public class PostControllers{
         }
 
         model.addAttribute("name", existingUser.getFirst_name() + " " + existingUser.getLast_name());
-        return "view"; // Change this as necessary
+        return "redirect:/view";
     }
-
 
 }
