@@ -26,29 +26,29 @@ public class UserServiceImp{
             throw new RuntimeException("Error saving user to the database.");
         }
     }
-//Update User
-public User updateUser(User user) {
-    // Basic validation
-    if (user.getFirst_name() == null || user.getFirst_name().isEmpty()) {
-        throw new IllegalArgumentException("First name is required.");
-    }
-    // Add other validation checks as needed
+    //Update User
+    public User updateUser(User user) {
+        // Basic validation
+        if (user.getFirst_name() == null || user.getFirst_name().isEmpty()) {
+            throw new IllegalArgumentException("First name is required.");
+        }
+        // Add other validation checks as needed
 
-    try {
-        return userRepository.save(user);
-    } catch (Exception e) {
-        e.printStackTrace(); // Log the stack trace for debugging
-        throw new RuntimeException("Error saving user to the database: " + e.getMessage());
+        try {
+            return userRepository.save(user);
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the stack trace for debugging
+            throw new RuntimeException("Error saving user to the database: " + e.getMessage());
+        }
     }
-}
 
 
     public User loginUser(String email, String password) {
-          User validUser=userRepository.findByEmail(email);
-          if(validUser!=null && validUser.getPassword().equals(password)){
-              return validUser;
-          }
-          return null;
+        User validUser=userRepository.findByEmail(email);
+        if(validUser!=null && validUser.getPassword().equals(password)){
+            return validUser;
+        }
+        return null;
     }
 
     public Optional<User> getUserById(int id) {

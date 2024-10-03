@@ -23,6 +23,8 @@ public class AddPost {
     private String image_name;
     @Lob
     private byte[] image_data;
+    @Lob
+    private String image_string_data;
 
     // This is UserId on which I am adding foreign key
     @ManyToOne(cascade = CascadeType.ALL) // Change here

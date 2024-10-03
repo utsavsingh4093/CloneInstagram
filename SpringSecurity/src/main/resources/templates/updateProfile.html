@@ -36,7 +36,7 @@
 <div class="container col-md-6">
   <form class="row g-3 needs-validation" th:action="@{/updateProfile}" th:object="${user}" method="post" enctype="multipart/form-data" novalidate>
 
-    <input type="hidden" th:field="*{id}" />
+    <input type="hidden" th:field="*{id}" name="userId" />
 
     <div class="col-md-6 position-relative">
       <label for="first_name" class="form-label">First name</label>
