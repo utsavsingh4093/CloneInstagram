@@ -16,7 +16,9 @@ public class PostComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int comment_id;
-    private List<String> comment;
+
+    @Column(columnDefinition = "TEXT")
+    private String comment;
 
     // This is from User Class
     @ManyToOne(cascade = CascadeType.ALL) // Change here
