@@ -17,15 +17,14 @@ public class PostLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int like_id;
-    private List<Integer> likes;
 
-    // Getting the data of user_id
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_user_Id")
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "fk_user_id", referencedColumnName = "user_Id")
+    private User user; // Reference to User entity
 
-    // Getting the data of post_id
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_post_id")
     private AddPost addPost;
+
 }
+

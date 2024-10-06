@@ -1,6 +1,8 @@
 package com.java.main.controller;
 
+import com.java.main.entity.AddPost;
 import com.java.main.entity.User;
+import com.java.main.service.AddPostService;
 import com.java.main.service.UserServiceImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 @Controller//it use to handel http request
@@ -23,6 +27,9 @@ public class UserController {
 
     @Autowired
     private UserServiceImp userServiceImp;
+
+    @Autowired
+    AddPostService addPostService;
 
     @GetMapping("/register")
     public String openRegsitrationPage(Model model) {
@@ -39,10 +46,17 @@ public class UserController {
     @GetMapping("/homepage")
     public String openHomePage(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user"); // Retrieve user from session
-        System.err.println(user.getFirst_name() + " ajsbd ");
         if (user != null) {
             model.addAttribute("user", user);
+            List<AddPost> posts=addPostService.findListOfPost();
+            for(AddPost getPost : posts)
+            {
+                String img= Base64.getEncoder().encodeToString(getPost.getImage_data());
+                getPost.setImage_string_data("data:image/png;base64,"+img);
+                System.out.println("Post ID: " + getPost.getPost_id() + ", Name: " + getPost.getPost_name());
+            }
             // model.addAttribute("userdata",user.getFirst_name()+" "+user.getLast_name());
+            model.addAttribute("getPost",posts);
             return "homepage";
         } else {
             return "redirect:/login"; // Redirect to login if session expired
@@ -67,7 +81,7 @@ public class UserController {
         User student1 = userServiceImp.registerUser(user);
         System.out.println(student1.getFirst_name());
         //  model.addAttribute("name",student1.getFirst_name()+" "+student1.getLast_name());
-        return "home";
+        return "login";
     }
 
     @PostMapping("/logForm")
@@ -76,8 +90,8 @@ public class UserController {
         if (validUser != null) {
             model.addAttribute("username", validUser.getFirst_name() + " " + validUser.getLast_name());
             model.addAttribute("userdata", validUser.getId());
-            System.out.println(validUser.getId() + "here i am getting user id");
-            return "redirect:/homepage/" + validUser.getId(); // Redirect to getdata with user ID
+            System.out.println(validUser.getId() + " here i am getting user id");
+            return "redirect:/homeData/" + validUser.getId(); // Redirect to getdata with user ID
 
         } else {
             model.addAttribute("errorMsg", "Wrong email and password");
@@ -109,10 +123,19 @@ public class UserController {
     }
 
     // Redirect to getdata page after login
-    @GetMapping("/homepage/{id}")
+    @GetMapping("/homeData/{id}")
     public String getUserData(@PathVariable int id, Model model, HttpSession httpSession) {
         Optional<User> user = userServiceImp.getUserById(id);
         if (user.isPresent()) {
+            List<AddPost> posts=addPostService.findListOfPost();
+            for(AddPost getPost : posts)
+            {
+                String img= Base64.getEncoder().encodeToString(getPost.getImage_data());
+                getPost.setImage_string_data("data:image/png;base64,"+img);
+                System.out.println("Post ID: " + getPost.getPost_id() + ", Name: " + getPost.getPost_name());
+            }
+            // model.addAttribute("userdata",user.getFirst_name()+" "+user.getLast_name());
+            model.addAttribute("getPost",posts);
             model.addAttribute("user", user.get());
             model.addAttribute("username", user.get().getFirst_name() + " " + user.get().getLast_name());
             httpSession.setAttribute("user", user.get());

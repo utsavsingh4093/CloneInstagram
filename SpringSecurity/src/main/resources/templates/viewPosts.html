@@ -3,6 +3,7 @@
 <head>
     <title>View Posts</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <style>
         .heart-btn {
             background: none;
@@ -35,38 +36,64 @@
         </ul>
     </div>
 </nav>
-
-
 <div class="container mt-4">
-    <h1 class="text-center my-4">Posts</h1>
+    <h1 class="text-center my-4" style="color:blue;">This is Your Posts</h1>
     <div class="row justify-content-center">
-        <div class="col-md-4" th:each="post : ${addPost}">
-            <div class="card shadow-sm m-4">
-                <img th:src="${post.image_string_data}" alt="Post Image" class="img-fluid mx-auto d-block" height="400px" width="400px">
-
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${post.post_name}">Post Title</h5>
-                    <p class="card-text" style="text-align: center;" th:text="${post.caption}">This is a caption for the
-                        post.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <button type="button" class="btn heart-btn" onclick="toggleColor(this)">
-                                <div class="heart"></div>
-                            </button>
+        <div class="col-md-8">
+            <!-- Loop through each post in addPost -->
+            <div class="row" th:each="post : ${addPost}">
+                <div class="col-md-12">
+                    <div class="card shadow-sm m-4">
+                        <img th:src="${post.image_string_data}" alt="Post Image" class="img-fluid mx-auto d-block" height="400px" width="400px">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${post.post_name}">Post Title</h5>
+                            <p class="card-text" style="text-align: center;" th:text="${post.caption}">This is a caption for the post.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <span>Like</span>
+                                    <button type="button" class="btn heart-btn" onclick="toggleColor(this, '${post.post_id}')">
+                                        <div class="heart" id="heart-${post.post_id}" style="background-color: gray;"></div>
+                                    </button>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Comment</button>
+                            </div>
                         </div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Comment</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <script>
-    function toggleColor(button) {
+    function toggleColor(button, postId) {
         const heart = button.querySelector('.heart');
-        heart.style.backgroundColor = heart.style.backgroundColor === 'red' ? 'gray' : 'red';
+        const currentColor = heart.style.backgroundColor;
+
+        // Toggle color
+        const newColor = currentColor === 'red' ? 'gray' : 'red';
+        heart.style.backgroundColor = newColor;
+
+        // Save the state in local storage
+        localStorage.setItem(`like_${postId}`, newColor);
     }
+
+    // Load heart states from local storage on page load
+    window.onload = function() {
+        const hearts = document.querySelectorAll('.heart');
+        hearts.forEach((heart) => {
+            const postId = heart.id.split('-')[1]; // Extract the post ID from the element ID
+            const savedColor = localStorage.getItem(`like_${postId}`);
+            if (savedColor) {
+                heart.style.backgroundColor = savedColor;
+            } else {
+                heart.style.backgroundColor = 'gray'; // Default color
+            }
+        });
+    };
 </script>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

@@ -29,10 +29,15 @@ public class AddPost {
     // This is UserId on which I am adding foreign key
     @ManyToOne(cascade = CascadeType.ALL) // Change here
     @JoinColumn(name = "fk_user_Id", referencedColumnName = "user_Id") // Adjusted to refer to single User
-    private User user; // Change to a single User reference
+    private User user;
+
+    private int likesCount;
 
      //This is Refernec of post class
+     @OneToMany(mappedBy = "addPost", cascade = CascadeType.ALL)
+     private List<PostComment> comments;
+
     @OneToMany(mappedBy = "addPost", cascade = CascadeType.ALL)
-    private List<PostComment> comments;
+    private List<PostLike> likes;
 
 }

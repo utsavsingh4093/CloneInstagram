@@ -4,24 +4,18 @@ import com.java.main.entity.AddPost;
 import com.java.main.entity.User;
 import com.java.main.service.AddPostService;
 import com.java.main.service.UserServiceImp;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.data.repository.Repository;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
-@SessionAttributes("userdata")//for getting user id at from usercontroller page
+//@SessionAttribute("userdata")//for getting user id at from usercontroller page
 public class AddingPost {
     @Autowired
     private AddPostService addPostService;
@@ -30,15 +24,18 @@ public class AddingPost {
     UserServiceImp userServiceImp;
 
     @GetMapping("/addPost")
-    public String getPost(Model model) {
+    public String getPost(Model model, @SessionAttribute("userdata") Integer userId) {
+        System.out.println("jksdba alsdnf "+userId);
         model.addAttribute("addPost", new AddPost());
         return "addPost";
     }
 
     @PostMapping("/addPostForm")
-    public String addingDataOnAddPost(@ModelAttribute("addPost") AddPost addPost, @RequestParam("profileImage") MultipartFile imageFile, @RequestParam("userId") Integer userId, Model model) throws IOException {
+    public String addingDataOnAddPost(@ModelAttribute("addPost") AddPost addPost, @RequestParam("profileImage") MultipartFile imageFile, @SessionAttribute("userdata") Integer userId, Model model) throws IOException {
         if (!imageFile.isEmpty()) {
             //There i,am getting the data and setting the data in it user
+
+            System.out.println("That : "+userId);
             User user = userServiceImp.getById(userId);
             if (user != null) {
                 addPost.setUser(user);
@@ -54,28 +51,17 @@ public class AddingPost {
     }
 
     @GetMapping("/viewPosts")
-    public String getAllPosts(Model model) {
-        List<AddPost> addPostList = addPostService.findListOfPost();
-        System.out.println(addPostList.size());
-        for (AddPost post : addPostList) {
+    public String findListOfPost(@SessionAttribute("userdata") Integer userId , Model model) {
+        List<AddPost> posts = addPostService.findListOfPostData(userId);
+        System.out.println("This is User ID : "+userId +" :  : ");
+        System.out.println(userId+ " Here i am Getting my id");
+        for (AddPost post : posts) {
+            String img = Base64.getEncoder().encodeToString(post.getImage_data());
+            post.setImage_string_data("data:image/png;base64,"+img);
             System.out.println("Post ID: " + post.getPost_id() + ", Name: " + post.getPost_name());
         }
-        model.addAttribute("addPost", addPostList);
+        model.addAttribute("addPost",posts);
         return "viewPosts";
-    }
-
-    @GetMapping("/addPost/{id}/image")
-    public ResponseEntity<ByteArrayResource> getPostImages(@PathVariable int id) {
-        Optional<AddPost> addPost = addPostService.getUserById(id);
-        System.out.println(addPost.get().getPost_id()+" asjdn akjsa ;jad s");
-        if (addPost.isPresent() && addPost.get().getImage_data() != null) {
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(addPost.get().getImage_type()))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + addPost.get().getImage_name() + "\"")
-                    .body(new ByteArrayResource(addPost.get().getImage_data()));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 
 
