@@ -53,7 +53,7 @@ public class UserController {
             {
                 String img= Base64.getEncoder().encodeToString(getPost.getImage_data());
                 getPost.setImage_string_data("data:image/png;base64,"+img);
-                System.out.println("Post ID: " + getPost.getPost_id() + ", Name: " + getPost.getPost_name());
+                System.out.println("Post ID: " + getPost.getPostId() + ", Name: " + getPost.getPost_name());
             }
             // model.addAttribute("userdata",user.getFirst_name()+" "+user.getLast_name());
             model.addAttribute("getPost",posts);
@@ -132,7 +132,7 @@ public class UserController {
             {
                 String img= Base64.getEncoder().encodeToString(getPost.getImage_data());
                 getPost.setImage_string_data("data:image/png;base64,"+img);
-                System.out.println("Post ID: " + getPost.getPost_id() + ", Name: " + getPost.getPost_name());
+                System.out.println("Post ID: " + getPost.getPostId() + ", Name: " + getPost.getPost_name());
             }
             // model.addAttribute("userdata",user.getFirst_name()+" "+user.getLast_name());
             model.addAttribute("getPost",posts);

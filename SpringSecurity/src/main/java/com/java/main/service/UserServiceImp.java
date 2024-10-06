@@ -56,6 +56,10 @@ public class UserServiceImp{
     }
 
     public User getAllProductById(int id) {
-        return userRepository.findById(id).orElse(new User());
+        return null;
+    }
+
+    public Optional<User> findById(int id) {
+        return userRepository.findById(id);
     }
 }

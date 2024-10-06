@@ -36,4 +36,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PostComment> comments;
+
+    public User(int userId) {
+        this.id=userId;
+    }
 }

@@ -1,7 +1,9 @@
 package com.java.main.controller;
 
 import com.java.main.entity.AddPost;
+import com.java.main.entity.PostLike;
 import com.java.main.entity.User;
+import com.java.main.service.PostLikeService;
 import com.java.main.service.AddPostService;
 import com.java.main.service.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +60,10 @@ public class AddingPost {
         for (AddPost post : posts) {
             String img = Base64.getEncoder().encodeToString(post.getImage_data());
             post.setImage_string_data("data:image/png;base64,"+img);
-            System.out.println("Post ID: " + post.getPost_id() + ", Name: " + post.getPost_name());
+            System.out.println("Post ID: " + post.getPostId() + ", Name: " + post.getPost_name());
         }
         model.addAttribute("addPost",posts);
         return "viewPosts";
     }
-
 
 }

@@ -7,12 +7,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+@Component
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
 public class PostComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +25,7 @@ public class PostComment {
 
     //This is from Add Post Class
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_post_id")
+    @JoinColumn(name = "fk_postId")
     private AddPost addPost;
 
 

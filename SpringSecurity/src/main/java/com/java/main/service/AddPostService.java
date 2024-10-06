@@ -31,5 +31,4 @@ public class AddPostService {
         return addPostsRepository.findById(id); // Assuming you're using JpaRepository
     }
 
-
 }
