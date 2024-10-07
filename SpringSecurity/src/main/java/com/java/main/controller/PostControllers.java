@@ -80,7 +80,7 @@ public class PostControllers{
         Optional<User> user = userServiceImp.getUserById(id);
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
-            return "updateProfile"; // Return the update profile view
+            return "updateProfile";
         } else {
             return "404"; // Handle user not found
         }

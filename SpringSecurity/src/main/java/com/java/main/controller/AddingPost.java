@@ -1,9 +1,7 @@
 package com.java.main.controller;
 
 import com.java.main.entity.AddPost;
-import com.java.main.entity.PostLike;
 import com.java.main.entity.User;
-import com.java.main.service.PostLikeService;
 import com.java.main.service.AddPostService;
 import com.java.main.service.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,7 @@ import java.util.Base64;
 import java.util.List;
 
 @Controller
-//@SessionAttribute("userdata")//for getting user id at from usercontroller page
+//@SessionAttribute("userdata") // for getting user id at from usercontroller page
 public class AddingPost {
     @Autowired
     private AddPostService addPostService;
