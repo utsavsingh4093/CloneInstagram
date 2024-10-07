@@ -3,16 +3,13 @@ package com.java.main.controller;
 import com.java.main.entity.PostComment;
 import com.java.main.service.AddCommentService;
 import com.java.main.service.AddPostService;
+import com.java.main.service.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -23,6 +20,10 @@ public class AddCommentController {
 
     @Autowired
     AddPostService addPostService;
+
+    @Autowired
+    UserServiceImp userServiceImp;
+
     @PostMapping("/comment")
     public String addComment(@RequestParam Integer userId, @RequestParam Integer postId, @RequestParam String UserComment, Model model) {
 
@@ -60,4 +61,13 @@ public class AddCommentController {
 
         return "redirect:/viewPosts";
     }
+
+//    @GetMapping("/getUserNameById")
+//    public String getUserNameById(@RequestParam Integer userId)
+//    {
+//        Optional<User> user=userServiceImp.getUserById(userId);
+//        String name=user.get().getFirst_name()+" "+user.get().getLast_name();
+//        System.out.println("Here i am getting my User : "+user.get().getFirst_name()+" "+user.get().getLast_name());
+//        return name;
+//    }
 }

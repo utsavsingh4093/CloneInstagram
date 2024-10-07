@@ -55,7 +55,7 @@ public class UserController {
                 getPost.setImage_string_data("data:image/png;base64,"+img);
                 System.out.println("Post ID: " + getPost.getPostId() + ", Name: " + getPost.getPost_name());
             }
-            // model.addAttribute("userdata",user.getFirst_name()+" "+user.getLast_name());
+             model.addAttribute("username",user.getFirst_name()+" "+user.getLast_name());
             model.addAttribute("getPost",posts);
             return "homepage";
         } else {

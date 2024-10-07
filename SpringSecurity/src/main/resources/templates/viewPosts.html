@@ -57,9 +57,9 @@
                                         <input type="hidden" th:value="${userId}" name="userId">
                                         <input type="hidden" th:value="${post.postId}" name="postId">
                                         <span>Like</span>
-                                        <button type="submit" class="btn heart-btn" onclick="toggleColor(this)">
+                                        <button type="submit" class="btn heart-btn" id="color">
                                             <div class="heart"></div>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                            <span id="likesBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                                                   th:text="${post.likesCount}" onload="checkLikes()"></span>
                                         </button>
                                     </form>
@@ -90,6 +90,26 @@
         </div>
     </div>
 </div>
+<script>
+    function checkLikes() {
+        const likesBadge = document.getElementById('likesBadge');
+        const colorData=document.getElementById('color');
+
+        const likesCount = parseInt(likesBadge.textContent, 10); // Get the likes count from the badge text
+        console.log(likesCount);
+
+        if (likesCount > 0) {
+            colorData.classList.remove('badge-gray'); // Ensure it has the red badge
+            colorData.classList.add('bg-danger');
+        } else {
+            colorData.classList.remove('bg-danger'); // Remove red badge if likesCount is zero
+            colorData.classList.add('badge-gray'); // Add gray badge
+        }
+    }
+
+    // Call the function when the page loads
+    window.onload = checkLikes;
+</script>
 
 <script>
     document.querySelectorAll('.toggleCommentsBtn').forEach(button => {
@@ -105,15 +125,6 @@
         });
     });
 </script>
-
-<script>
-    function toggleColor(button) {
-        const heart = button.querySelector('.heart');
-        heart.style.backgroundColor = heart.style.backgroundColor === 'red' ? 'gray' : 'red';
-    }
-</script>
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
