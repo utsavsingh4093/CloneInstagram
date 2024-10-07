@@ -65,5 +65,4 @@ public class AddingPost {
         model.addAttribute("addPost",posts);
         return "viewPosts";
     }
-
 }

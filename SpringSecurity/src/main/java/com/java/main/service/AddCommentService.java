@@ -15,7 +15,7 @@ public class AddCommentService {
     private AddPostsRepository addPostsRepository;
 
     @Autowired
-    private UserRepository userRepository; // Assuming you have a user repository
+    private UserRepository userRepository;
 
     @Autowired
     private AddCommentRepo addCommentRepo;
@@ -31,6 +31,7 @@ public class AddCommentService {
         postComment.setUser(user);
 
         addCommentRepo.save(postComment);
+
         return "Comment saved";
     }
 }
