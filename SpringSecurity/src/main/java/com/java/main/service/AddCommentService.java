@@ -9,6 +9,8 @@ import com.java.main.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AddCommentService {
     @Autowired
@@ -33,5 +35,10 @@ public class AddCommentService {
         addCommentRepo.save(postComment);
 
         return "Comment saved";
+    }
+
+    public Optional<PostComment> findPostComment(Integer id)
+    {
+        return addCommentRepo.findById(id);
     }
 }

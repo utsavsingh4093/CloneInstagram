@@ -60,11 +60,28 @@
                                         <button type="submit" class="btn heart-btn" onclick="toggleColor(this)">
                                             <div class="heart"></div>
                                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                                  th:text="${post.likesCount}"></span>
+                                                  th:text="${post.likesCount}" onload="checkLikes()"></span>
                                         </button>
                                     </form>
                                 </div>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Comment</button>
+                                <form th:action="@{/commentOnUserProfile}" method="post">
+                                    <input type="hidden" th:value="${userId}" name="userId">
+                                    <input type="hidden" th:value="${post.postId}" name="postId">
+                                    <input type="text" name="comment" placeholder="Add a comment">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">Comment</button>
+                                </form>
+
+
+                                <!-- Comments Section -->
+
+                                <div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary toggleCommentsBtn">See All Comments</button>
+                                    <div class="comments" style="display: none;">
+                                        <ul class="list-group mt-2" th:each="comm : ${post.comments}">
+                                            <li class="list-group-item" th:text="${comm.comment}"></li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -75,31 +92,25 @@
 </div>
 
 <script>
-    function toggleColor(button, postId) {
-        const heart = button.querySelector('.heart');
-        const currentColor = heart.style.backgroundColor;
-
-        // Toggle color
-        const newColor = currentColor === 'red' ? 'gray' : 'red';
-        heart.style.backgroundColor = newColor;
-
-        // Save the state in local storage
-        localStorage.setItem(`like_${postId}`, newColor);
-    }
-
-    // Load heart states from local storage on page load
-    window.onload = function() {
-        const hearts = document.querySelectorAll('.heart');
-        hearts.forEach((heart) => {
-            const postId = heart.id.split('-')[1]; // Extract the post ID from the element ID
-            const savedColor = localStorage.getItem(`like_${postId}`);
-            if (savedColor) {
-                heart.style.backgroundColor = savedColor;
+    document.querySelectorAll('.toggleCommentsBtn').forEach(button => {
+        button.addEventListener('click', () => {
+            const commentsSection = button.nextElementSibling;
+            if (commentsSection.style.display === 'none' || commentsSection.style.display === '') {
+                commentsSection.style.display = 'block';
+                button.textContent = 'Hide Comments';
             } else {
-                heart.style.backgroundColor = 'gray'; // Default color
+                commentsSection.style.display = 'none';
+                button.textContent = 'See All Comments';
             }
         });
-    };
+    });
+</script>
+
+<script>
+    function toggleColor(button) {
+        const heart = button.querySelector('.heart');
+        heart.style.backgroundColor = heart.style.backgroundColor === 'red' ? 'gray' : 'red';
+    }
 </script>
 
 
