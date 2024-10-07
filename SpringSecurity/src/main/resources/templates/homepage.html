@@ -67,12 +67,25 @@
                      <!-- <p class="card-text" style="text-align: center;" th:text="${user.id}">This is a caption for the post.</p> -->
 
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group"><span>Like</span>
-                                    <button type="button" class="btn heart-btn" onclick="toggleColor(this)">
+                                <div class="btn-group">
+                                    <form th:action="@{/addLikes}" method="post">
+                                        <input type="hidden" th:value="${user.id}" name="userId">
+                                        <input type="hidden" th:value="${post.postId}" name="postId">
+                                    <span>Like</span>
+                                    <button type="submit" class="btn heart-btn" onclick="toggleColor(this)">
                                         <div class="heart"></div>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                              th:text="${post.likesCount}"></span>
                                     </button>
+                                    </form>
                                 </div>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Comment</button>
+                                <form th:action="@{/comment}" method="post">
+                                    <input type="hidden" th:value="${user.id}" name="userId">
+                                    <input type="hidden" th:value="${post.postId}" name="postId">
+                                    <input type="text" name="UserComment"/>
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">DoComment</button>
+                                </form>
+                                <button type="button" class="btn btn-sm btn-outline-primary">SeeAllComment</button>
                             </div>
                         </div>
                     </div>

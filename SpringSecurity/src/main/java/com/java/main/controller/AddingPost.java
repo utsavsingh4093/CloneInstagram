@@ -55,6 +55,7 @@ public class AddingPost {
         List<AddPost> posts = addPostService.findListOfPostData(userId);
         System.out.println("This is User ID : "+userId +" :  : ");
         System.out.println(userId+ " Here i am Getting my id");
+        model.addAttribute("userId", userId);
         for (AddPost post : posts) {
             String img = Base64.getEncoder().encodeToString(post.getImage_data());
             post.setImage_string_data("data:image/png;base64,"+img);

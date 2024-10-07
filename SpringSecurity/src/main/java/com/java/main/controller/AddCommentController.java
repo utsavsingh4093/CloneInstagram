@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.Map;
 
 @Controller
@@ -16,21 +18,14 @@ public class AddCommentController {
     AddCommentService addCommentService;
 
     @PostMapping("/comment")
-    public ResponseEntity<String> addComment(@RequestBody Map<String, Object> request) {
+    public String addComment(@RequestParam Integer userId, @RequestParam Integer postId, @RequestParam String UserComment) {
 
-        int userId = (Integer) request.get("userId");
-        int postId = (Integer) request.get("postId");
-
-        String commentText = (String) request.get("comment");
-
-        try {
+        System.out.println(userId+ " : "+ postId + " : Here i am getting id's");
             PostComment postComment = new PostComment();
-            postComment.setComment(commentText);
+            postComment.setComment(UserComment);
             String message = addCommentService.addComment(userId, postId, postComment);
-            return ResponseEntity.ok("Comment added: " + message);
-        }
-        catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-        }
+           // return ResponseEntity.ok("Comment added: " + message);
+          //return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        return "redirect:/homepage";
     }
 }
