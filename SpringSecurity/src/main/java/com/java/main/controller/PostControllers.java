@@ -30,6 +30,7 @@ public class PostControllers{
         if(user!=null)
         {
             model.addAttribute("user",new User());
+            model.addAttribute("username",user.getFirst_name()+" "+user.getLast_name());
         }
         else{
             return "redirect:/login";
@@ -43,6 +44,7 @@ public class PostControllers{
         Optional<User> user = userServiceImp.getUserById(id);
         if(user.isPresent()){
             model.addAttribute("user",user.get());
+            model.addAttribute("username",user.get().getFirst_name()+" "+user.get().getLast_name());
             httpSession.setAttribute("user",user.get());
             return "view";
         }

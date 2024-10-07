@@ -37,7 +37,7 @@
     </div>
 </nav>
 
-<h1>Welcome <span th:text="${userId}"></span></h1>
+<h1>Welcome <span th:text="${username}"></span></h1>
 <div class="container mt-4">
     <h1 class="text-center my-4" style="color:blue;">This is Your Posts</h1>
     <div class="row justify-content-center">
@@ -67,6 +67,7 @@
                                 <form th:action="@{/commentOnUserProfile}" method="post">
                                     <input type="hidden" th:value="${userId}" name="userId">
                                     <input type="hidden" th:value="${post.postId}" name="postId">
+                                    <input type="hidden" th:value="${username}" name="userName">
                                     <input type="text" name="comment" placeholder="Add a comment">
                                 <button type="submit" class="btn btn-sm btn-outline-secondary">Comment</button>
                                 </form>
@@ -79,6 +80,7 @@
                                     <div class="comments" style="display: none;">
                                         <ul class="list-group mt-2" th:each="comm : ${post.comments}">
                                             <li class="list-group-item" th:text="${comm.comment}"></li>
+                                            <span th:text="${comm.userName}" style="color:blue"></span>
                                         </ul>
                                     </div>
                                 </div>

@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 //@SessionAttribute("userdata") // for getting user id at from usercontroller page
@@ -52,10 +53,15 @@ public class AddingPost {
 
     @GetMapping("/viewPosts")
     public String findListOfPost(@SessionAttribute("userdata") Integer userId , Model model) {
+        Optional<User> user=userServiceImp.getUserById(userId);
+
         List<AddPost> posts = addPostService.findListOfPostData(userId);
         System.out.println("This is User ID : "+userId +" :  : ");
         System.out.println(userId+ " Here i am Getting my id");
         model.addAttribute("userId", userId);
+        model.addAttribute("username",user.get().getFirst_name()+" "+user.get().getLast_name());
+
+
         for (AddPost post : posts) {
             String img = Base64.getEncoder().encodeToString(post.getImage_data());
             post.setImage_string_data("data:image/png;base64,"+img);

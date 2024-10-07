@@ -37,6 +37,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PostComment> comments;
 
+
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+    private List<AddFollowers> addFollowers;
+
     public User(int userId) {
         this.id=userId;
     }

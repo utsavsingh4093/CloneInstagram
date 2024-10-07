@@ -52,6 +52,7 @@
         </ul>
     </div>
 </nav>
+ Welcome... <span th:text="${username}"></span>
 <div class="container mt-4">
     <h1 class="text-center my-4"></h1>
     <div class="row justify-content-center">
@@ -63,6 +64,7 @@
                              height="400px" width="400px">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${post.post_name}">Post Title</h5>
+                            <button type="button" class="btn btn-sm btn-outline-primary">Follow</button>
                             <p class="card-text" style="text-align: center;" th:text="${post.caption}">This is a caption
                                 for the post.</p>
 
@@ -85,6 +87,7 @@
                                 <form th:action="@{/comment}" method="post">
                                     <input type="hidden" th:value="${user.id}" name="userId">
                                     <input type="hidden" th:value="${post.postId}" name="postId">
+                                    <input type="hidden" th:value="${username}" name="userName">
                                     <input type="text" name="UserComment" placeholder="Add a comment"/>
                                     <button type="submit" class="btn btn-sm btn-outline-secondary">Do Comment</button>
                                 </form>
@@ -100,6 +103,7 @@
 
                                         <ul class="list-group mt-2" th:each="comm : ${post.comments}">
                                             <li class="list-group-item" th:text="${comm.comment}"></li>
+                                            <span th:text="${comm.userName}" style="color:blue"></span>
                                         </ul>
                                     </div>
 
