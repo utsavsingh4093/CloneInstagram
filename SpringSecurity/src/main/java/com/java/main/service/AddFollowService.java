@@ -1,6 +1,7 @@
 package com.java.main.service;
 
 import com.java.main.entity.AddFollowers;
+import com.java.main.entity.AddFollowersWrapper;
 import com.java.main.entity.PostLike;
 import com.java.main.entity.User;
 import com.java.main.repository.AddFollowRepo;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,7 +39,7 @@ public class AddFollowService {
         }
 
         else {
-            String type="Follow";
+            String type="Following";
             AddFollowers addFollowers=new AddFollowers();
             addFollowers.setFollowedId(followedId);
             addFollowers.setUser(user);
@@ -44,5 +47,13 @@ public class AddFollowService {
             addFollowRepo.save(addFollowers);
             return "Like added successfully.";
         }
+    }
+
+    public List<AddFollowersWrapper> getAllFollowersByUserId(int userId) {
+        List<AddFollowersWrapper> list = new ArrayList<>();
+       for(AddFollowers user :addFollowRepo.findByUser_Id(userId)){
+           list.add(new AddFollowersWrapper(user.getFollowId(),user.getUser().getId(),user.getFollowedId(),user.getType()));
+        }
+        return list;
     }
 }
