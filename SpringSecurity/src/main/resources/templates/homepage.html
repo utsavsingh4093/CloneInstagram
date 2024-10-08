@@ -79,13 +79,13 @@ Welcome... <span th:text="${username}"></span>
 
                                 <!-- Checking if the post table user ID is not equal to the user table user ID -->
                                 <div th:if="${post.user.Id} != ${userdata}">
-                                <form th:action="@{/addFollow}" method="post" class="ms-2">
-                                    <input type="hidden" th:value="${user.id}" name="userId">
-                                    <input type="hidden" th:value="${post.user.Id}" name="followedId">
-                                    <button type="submit" class="btn btn-sm btn-outline-primary" id="followButton">
-                                        Follow
-                                    </button>
-                                </form>
+                                    <form th:action="@{/addFollow}" method="post" class="ms-2">
+                                        <input type="hidden" th:value="${user.id}" name="userId">
+                                        <input type="hidden" th:value="${post.user.Id}" name="followedId">
+                                        <button type="submit" class="btn btn-sm btn-outline-primary" id="followButton">
+                                            Follow
+                                        </button>
+                                    </form>
                                 </div>
                             </li>
 

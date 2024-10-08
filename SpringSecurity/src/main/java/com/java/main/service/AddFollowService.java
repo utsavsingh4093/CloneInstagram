@@ -31,7 +31,7 @@ public class AddFollowService {
 
         if(existingFollowers.isPresent())
         {
-            addFollowRepo.deleteByUser_IdAndFollowedId(userId,followedId);
+            addFollowRepo.delete(existingFollowers.get());
             return "Follow removed successfully.";
         }
 
