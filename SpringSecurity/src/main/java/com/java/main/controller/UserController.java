@@ -49,6 +49,7 @@ public class UserController {
         if (user != null) {
             model.addAttribute("user", user);
             List<AddPost> posts=addPostService.findListOfPost();
+
             for(AddPost getPost : posts)
             {
                 String img= Base64.getEncoder().encodeToString(getPost.getImage_data());
