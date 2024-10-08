@@ -1,6 +1,5 @@
 package com.java.main.controller;
 
-import com.java.main.entity.AddFollowers;
 import com.java.main.service.AddFollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,20 +12,11 @@ public class AddFollowController {
     AddFollowService addFollowService;
 
     @PostMapping("/addFollow")
-    public String addFollowers(@RequestParam Integer userId,@RequestParam Integer followedId, AddFollowers addFollowers) {
-        String addType = "Following";
-        try {
-            addFollowers.setType(addType);
-            addFollowers.setFollowedId(followedId);
-            addFollowService.addFollower(userId, addType, addFollowers);
+    public String addFollowers(@RequestParam int userId,@RequestParam int followedId) {
+        System.out.println("Your User ID : "+userId);
+        System.out.println("Your Followed ID : "+followedId);
+            addFollowService.followers(userId, followedId);
             System.out.println("Data");
-            // Redirect to a success page or back to the original page
-            return "redirect:/homepage"; // Adjust the redirect URL as needed
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            // Handle the error case, maybe return to the form with an error message
-            return "redirect:/login"; // Adjust as necessary
-        }
+            return "redirect:/homepage";
     }
-
 }

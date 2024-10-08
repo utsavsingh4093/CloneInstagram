@@ -17,9 +17,10 @@ public class AddFollowers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int followId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_user_Id") // This id is from user id
+    @ManyToOne
+    @JoinColumn(name = "fk_user_Id")
     private User user;
+
 
     private int followedId;
     private String type;

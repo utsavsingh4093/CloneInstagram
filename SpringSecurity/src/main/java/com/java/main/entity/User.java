@@ -38,8 +38,9 @@ public class User {
     private List<PostComment> comments;
 
 
-    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
-    private List<AddFollowers> addFollowers;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // Change this
+    private List<AddFollowers> followers;
+
 
     public User(int userId) {
         this.id=userId;
