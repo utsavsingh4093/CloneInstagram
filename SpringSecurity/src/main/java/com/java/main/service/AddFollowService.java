@@ -1,9 +1,6 @@
 package com.java.main.service;
 
-import com.java.main.entity.AddFollowers;
-import com.java.main.entity.AddFollowersWrapper;
-import com.java.main.entity.PostLike;
-import com.java.main.entity.User;
+import com.java.main.entity.*;
 import com.java.main.repository.AddFollowRepo;
 import com.java.main.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +52,9 @@ public class AddFollowService {
            list.add(new AddFollowersWrapper(user.getFollowId(),user.getUser().getId(),user.getFollowedId(),user.getType()));
         }
         return list;
+    }
+
+  public List<AddFollowers> getAllFollowersByUserIds(int userId) {
+        return addFollowRepo.findByUser_Id(userId);
     }
 }

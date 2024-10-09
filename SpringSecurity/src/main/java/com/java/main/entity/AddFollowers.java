@@ -21,7 +21,6 @@ public class AddFollowers {
     @JoinColumn(name = "fk_user_Id")
     private User user;
 
-
     private int followedId;
     private String type;
 }

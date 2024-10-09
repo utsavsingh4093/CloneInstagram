@@ -1,11 +1,13 @@
 package com.java.main.service;
 
+import com.java.main.entity.AddPost;
 import com.java.main.entity.User;
 import com.java.main.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,6 +51,10 @@ public class UserServiceImp{
             return validUser;
         }
         return null;
+    }
+
+    public List<User> findListOfUser() {
+        return userRepository.findAll();
     }
 
     public Optional<User> getUserById(int id) {
