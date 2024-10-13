@@ -42,15 +42,6 @@ public class AddFollowController {
         List<AddFollowersWrapper> followers = addFollowService.getAllFollowingByUserIdAndFollowId(userId, followId);
         return "redirect:/listFollow";
     }
-    
-    @PostMapping("/ListOfFollow")
-    public String deleteListOfFollowing(@RequestParam int userId, @RequestParam int followId,Model model)
-    {
-        System.out.println("Your User ID : " + userId);
-        System.out.println("Your Followed ID : " + followId);
-        addFollowService.deleteByUserIdAndFollowedId(userId,followId);
-         return "redirect:/listFollow";
-    }
 
     @GetMapping("/follower")
     public ResponseEntity<List<AddFollowersWrapper>> getFollowers(@RequestParam int userId,Model model) {

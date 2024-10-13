@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface AddFollowRepo  extends JpaRepository<AddFollowers , Integer> {
 
     List<AddFollowers> findByUser_IdAndFollowedId(int userId, int followedId);
-    Integer deleteByUser_IdAndFollowedId(int userId, int followedId);
+   // Integer deleteByUser_IdAndFollowedId(int userId, int followedId);
 
     AddFollowers findByUser_IdAndFollowedId(Integer userId, int followedId);
 

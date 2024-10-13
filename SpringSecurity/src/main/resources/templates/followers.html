@@ -63,13 +63,13 @@ Welcome... <span th:text="${username}"></span>
         <img th:src="${user.stringImageFile}" alt="Profile">
       </div>
       <div class="content">
-       This is My Followed UserID :  <p th:text="${userId}"></p>
+       This is My Followed UserID :  <p th:text="${user.id}"></p>
          <p th:text="${user.first_name + ' ' + user.last_name}"></p>
       </div>
       <div class="btn-group">
-        <form th:action="@{/ListOfFollow}" method="post">
-          <input type="hidden" name="followId" th:value="${user.id}"/>
-          <input type="hidden" name="userId" th:value="${userId}"/>
+        <form th:action="@{/addFollow}" method="post">
+          <input type="hidden" name="userId" th:value="${user.id}"/>
+          <input type="hidden" name="followedId" th:value="${userId}"/>
         <button type="submit" class="btn btn-primary">Not Accept</button>
         </form>
         <button type="submit" class="btn btn-secondary">Follow Back</button>

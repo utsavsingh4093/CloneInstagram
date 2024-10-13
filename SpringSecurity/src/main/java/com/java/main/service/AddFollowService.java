@@ -29,20 +29,6 @@ public class AddFollowService {
     }
 
     @Transactional
-    public void deleteByUserIdAndFollowedId(int userId, int followedId) {
-        int deletedCount = addFollowRepo.deleteByUser_IdAndFollowedId(userId, followedId);
-
-        if (deletedCount == 0) {
-            // Log the situation instead of throwing an exception
-            System.out.println("No follow relationship found for userId: " + userId + " and followedId: " + followedId);
-        } else {
-            // Optionally log successful deletion
-            System.out.println("Successfully deleted follow relationship for userId: " + userId + " and followedId: " + followedId);
-        }
-    }
-
-
-    @Transactional
     public String followers(int userId, int followedId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
