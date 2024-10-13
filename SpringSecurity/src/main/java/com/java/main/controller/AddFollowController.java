@@ -3,7 +3,7 @@ package com.java.main.controller;
 import com.java.main.entity.AddFollowers;
 import com.java.main.entity.AddFollowersWrapper;
 import com.java.main.entity.User;
-import com.java.main.repository.UserRepository;
+import com.java.main.entity.UserWrapper;
 import com.java.main.service.AddFollowService;
 import com.java.main.service.UserServiceImp;
 import jakarta.servlet.http.HttpSession;
@@ -11,14 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.Callable;
 
 @Controller
 
@@ -29,15 +25,31 @@ public class AddFollowController {
     @Autowired
     UserServiceImp userServiceImp;
 
-    private static final Logger logger = LoggerFactory.getLogger(AddFollowController.class);
-
     @PostMapping("/addFollow")
-    public String addFollowers(@RequestParam int userId,@RequestParam int followedId) {
-        System.out.println("Your User ID : "+userId);
-        System.out.println("Your Followed ID : "+followedId);
-            addFollowService.followers(userId, followedId);
-            System.out.println("Data");
-            return "redirect:/homepage";
+    public String addFollowers(@RequestParam int userId, @RequestParam int followedId) {
+        System.out.println("Your User ID : " + userId);
+        System.out.println("Your Followed ID : " + followedId);
+        addFollowService.followers(userId, followedId);
+        System.out.println("Data");
+        return "redirect:/homepage";
+    }
+
+    @PostMapping("/listFollowing")
+    public String addListOfFollowing(@RequestParam int userId, @RequestParam int followId,Model model) {
+        System.out.println("Your User ID : " + userId);
+        System.out.println("Your Followed ID : " + followId);
+        addFollowService.followers(userId, followId);
+        List<AddFollowersWrapper> followers = addFollowService.getAllFollowingByUserIdAndFollowId(userId, followId);
+        return "redirect:/listFollow";
+    }
+    
+    @PostMapping("/ListOfFollow")
+    public String deleteListOfFollowing(@RequestParam int userId, @RequestParam int followId,Model model)
+    {
+        System.out.println("Your User ID : " + userId);
+        System.out.println("Your Followed ID : " + followId);
+        addFollowService.deleteByUserIdAndFollowedId(userId,followId);
+         return "redirect:/listFollow";
     }
 
     @GetMapping("/follower")
@@ -47,20 +59,49 @@ public class AddFollowController {
         return ResponseEntity.ok(followers);
     }
 
-    @GetMapping("/following")
-    public String getFollowingData(Model model, HttpSession session)
-    {
-        User user=(User) session.getAttribute("user");
-        int userId=user.getId();
-        System.out.println(userId+" That is my USerID");
-        List<AddFollowers> followers = addFollowService.getAllFollowersByUserIds(userId);
-        model.addAttribute("getAllFollowers",followers);
+    //List of User
+    @GetMapping("/listFollow")
+    public String getAllFollowAvailable(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        int userId = user.getId();
+        System.out.println(userId + " That is my USerID");
+        List<UserWrapper> following=userServiceImp.getUserList();
 
-        if (user != null) {
-            model.addAttribute("username",user.getFirst_name()+" "+user.getLast_name());
-            model.addAttribute("userId",user.getId());
+        for(UserWrapper userWrapper : following){
+            if(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId())==null){
+                userWrapper.setFollowType(AddFollowers.FollowType.FOLLOW.toString());
+            }
+            else{
+                userWrapper.setFollowType(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId()).getFollowType());
+            }
         }
-        return "following";
+//        List<User> users = userServiceImp.findListOfUser();
+//        List<AddFollowersWrapper> followers = addFollowService.getAllFollowersByUserId(userId);
+
+        model.addAttribute("getAllUserForFollow", following);
+//        model.addAttribute("getAllFollowType",followers);
+        model.addAttribute("username", user.getFirst_name() + " " + user.getLast_name());
+        model.addAttribute("userId", user.getId());
+        return "listFollow";
+    }
+
+//I want to Do Display List Of Followers
+
+    @GetMapping("/followers")
+    public String getFollowingData(Model model, HttpSession session) {
+
+        User user = (User) session.getAttribute("user");
+        int userId = user.getId();
+
+        List<AddFollowersWrapper> follow = addFollowService.getAllFollowersByUserId(userId);
+        System.out.println("Here is the size of followers : "+follow.size());
+
+        List<UserWrapper> followers = addFollowService.getAllFollowersByUserIds(userId);
+
+        model.addAttribute("getAllFollowers", followers);
+        model.addAttribute("username", user.getFirst_name() + " " + user.getLast_name());
+        model.addAttribute("userId", userId);
+        return "followers"; // Thymeleaf template
     }
 
 }

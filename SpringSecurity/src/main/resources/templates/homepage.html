@@ -93,14 +93,14 @@ Welcome... <span th:text="${username}"></span>
                             <p class="card-text" style="text-align: center;" th:text="${post.caption}">This is a caption
                                 for the post.</p>
 
-                            <!--                            <p class="card-text" style="text-align: center;" th:text="${post.postId}"></p>-->
+                            <!-- <p class="card-text" style="text-align: center;" th:text="${post.postId}"></p>-->
 
-                            <!--                            &lt;!&ndash; Getting list Of USerId&ndash;&gt;-->
+                            <!--&lt;!&ndash; Getting list Of USerId&ndash;&gt;-->
+                            <!-- <p class="card-text" style="text-align: center;" th:text="${post.user.Id}"></p>-->
                             <!--                            <p class="card-text" style="text-align: center;" th:text="${post.user.Id}"></p>-->
-<!--                            <p class="card-text" style="text-align: center;" th:text="${post.user.Id}"></p>-->
-<!--                            <li th:each="like : ${post.likes}">-->
-<!--                                <span th:text="${like.likeId}"></span>-->
-<!--                            </li>-->
+                            <!--                            <li th:each="like : ${post.likes}">-->
+                            <!--                                <span th:text="${like.likeId}"></span>-->
+                            <!--                            </li>-->
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     <form th:action="@{/addLikes}" method="post">

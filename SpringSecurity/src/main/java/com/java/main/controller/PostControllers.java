@@ -1,6 +1,5 @@
 package com.java.main.controller;
 
-import com.java.main.entity.AddPost;
 import com.java.main.entity.User;
 import com.java.main.service.UserServiceImp;
 import jakarta.servlet.http.HttpSession;

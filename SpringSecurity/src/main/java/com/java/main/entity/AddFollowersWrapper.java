@@ -14,5 +14,6 @@ public class AddFollowersWrapper {
     private int followId;
     private Integer userId;
     private int followedId;
-    private String type;
+    private String followType;
+
 }

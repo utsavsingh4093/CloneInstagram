@@ -22,5 +22,13 @@ public class AddFollowers {
     private User user;
 
     private int followedId;
-    private String type;
+    private String followType;
+
+    @Enumerated(EnumType.STRING)
+    private FollowType type;
+    public enum FollowType {
+        FOLLOW,
+        FOLLOWING,
+        UNFOLLOW
+    }
 }

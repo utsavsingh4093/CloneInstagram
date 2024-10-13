@@ -1,12 +1,15 @@
 package com.java.main.service;
 
-import com.java.main.entity.AddPost;
+import com.java.main.entity.AddFollowers;
+import com.java.main.entity.AddFollowersWrapper;
 import com.java.main.entity.User;
+import com.java.main.entity.UserWrapper;
 import com.java.main.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,5 +70,15 @@ public class UserServiceImp{
 
     public Optional<User> findById(int id) {
         return userRepository.findById(id);
+    }
+
+    public List<UserWrapper> getUserList()
+    {
+        List<UserWrapper> list = new ArrayList<>();
+        for (User user : userRepository.findAll()) {
+            UserWrapper wrapper = new UserWrapper(user.getId(),user.getFirst_name(),user.getLast_name(),user.getEmail(),user.getCity(),user.getState(),user.getPassword(),user.getStringImageFile(),user.getFollowType());
+            list.add(wrapper);
+        }
+        return list;
     }
 }

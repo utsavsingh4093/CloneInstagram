@@ -147,21 +147,4 @@ public class UserController {
             return "404";
         }
     }
-
-    @GetMapping("/listFollow")
-    public String getAllFollowAvailable(HttpSession session,Model model)
-    {
-        User user=(User) session.getAttribute("user");
-        int userId=user.getId();
-        System.out.println(userId+" That is my USerID");
-
-       List<User> users=userServiceImp.findListOfUser();
-        model.addAttribute("getAllFollowers",users);
-
-        if (user != null) {
-            model.addAttribute("username",user.getFirst_name()+" "+user.getLast_name());
-            model.addAttribute("userId",user.getId());
-        }
-        return "listFollow";
-    }
 }

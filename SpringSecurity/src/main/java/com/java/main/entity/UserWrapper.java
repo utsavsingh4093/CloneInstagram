@@ -1,6 +1,5 @@
 package com.java.main.entity;
 
-import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,8 +15,8 @@ public class UserWrapper {
     private String city;
     private String state;
     private String password;
-    private String image_name;
-    private String image_type;
-    @Lob
-    private byte[] image_data;
+    private String stringImageFile;
+    private String followType;
+
+
 }

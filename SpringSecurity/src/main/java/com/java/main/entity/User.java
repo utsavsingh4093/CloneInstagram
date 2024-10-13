@@ -30,6 +30,19 @@ public class User {
     private String image_type;
     @Lob
     private byte[] image_data;
+    @Lob
+    private String stringImageFile;
+
+    private String followType;
+
+    @Enumerated(EnumType.STRING)
+    private FollowType type;
+
+    public enum FollowType {
+        FOLLOW,
+        FOLLOWING,
+        UNFOLLOW
+    }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // Add this to link to AddPost
     private List<AddPost> posts;
