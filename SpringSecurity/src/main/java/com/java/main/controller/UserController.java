@@ -45,11 +45,11 @@ public class UserController {
 
 
     @GetMapping("/homepage")
-    public String openHomePage(Model model, HttpSession session) {
+    public String openHomePage(@SessionAttribute("userdata") Integer userId,Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
             model.addAttribute("user", user);
-            List<AddPost> posts=addPostService.findListOfPost();
+            List<AddPost> posts=addPostService.findListOfPostData(userId);
 
             for(AddPost getPost : posts)
             {
@@ -129,7 +129,7 @@ public class UserController {
     public String getUserData(@PathVariable int id, Model model, HttpSession httpSession) {
         Optional<User> user = userServiceImp.getUserById(id);
         if (user.isPresent()) {
-            List<AddPost> posts=addPostService.findListOfPost();
+            List<AddPost> posts=addPostService.findListOfPostData(id);
             for(AddPost getPost : posts)
             {
                 String img= Base64.getEncoder().encodeToString(getPost.getImage_data());
