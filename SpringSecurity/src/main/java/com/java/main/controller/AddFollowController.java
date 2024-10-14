@@ -57,13 +57,9 @@ public class AddFollowController {
         int userId = user.getId();
         System.out.println(userId + " That is my USerID");
         List<UserWrapper> following=userServiceImp.getUserList();
-
         for(UserWrapper userWrapper : following){
-            if(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId())==null){
-                userWrapper.setFollowType(AddFollowers.FollowType.FOLLOW.toString());
-            }
-            else{
-                userWrapper.setFollowType(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId()).getFollowType());
+            if(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId())!=null){
+                userWrapper.setFollowType(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId()).getType().toString());
             }
         }
 //        List<User> users = userServiceImp.findListOfUser();
@@ -76,7 +72,16 @@ public class AddFollowController {
         return "listFollow";
     }
 
-//I want to Do Display List Of Followers
+    //I want to Do Display List Of Followers
+
+    @PostMapping("/ListOFFollowers")
+    public String addListOfFollowers(@RequestParam int userId, @RequestParam int followedId,Model model) {
+        System.out.println("Your User ID : " + userId);
+        System.out.println("Your Followed ID : " + followedId);
+        addFollowService.followBack(userId, followedId);
+        return "redirect:/followers";
+    }
+
 
     @GetMapping("/followers")
     public String getFollowingData(Model model, HttpSession session) {
@@ -88,7 +93,6 @@ public class AddFollowController {
         System.out.println("Here is the size of followers : "+follow.size());
 
         List<UserWrapper> followers = addFollowService.getAllFollowersByUserIds(userId);
-
         model.addAttribute("getAllFollowers", followers);
         model.addAttribute("username", user.getFirst_name() + " " + user.getLast_name());
         model.addAttribute("userId", userId);

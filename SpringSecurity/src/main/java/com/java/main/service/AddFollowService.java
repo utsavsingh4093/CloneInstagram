@@ -6,7 +6,6 @@ import com.java.main.entity.User;
 import com.java.main.entity.UserWrapper;
 import com.java.main.repository.AddFollowRepo;
 import com.java.main.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +48,31 @@ public class AddFollowService {
         }
     }
 
+    @Transactional
+    public void followBack(int userId, int followedId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<AddFollowers> existingFollowers = addFollowRepo.findByUser_IdAndFollowedId(userId, followedId);
+
+        if (existingFollowers.isEmpty()) {
+            // User is not following, so do nothing or handle as needed
+            // You might want to add a follow entry if necessary.
+        } else {
+            AddFollowers followEntry = existingFollowers.get(0);
+
+            if (followEntry.getType() == AddFollowers.FollowType.FOLLOWING) {
+                // User is currently FOLLOWING, so set it to UNFOLLOW
+                followEntry.setType(AddFollowers.FollowType.UNFOLLOW);
+                addFollowRepo.save(followEntry); // Update the entry
+            } else {
+                // User is currently UNFOLLOWING, so delete the entry
+                addFollowRepo.delete(followEntry);
+            }
+        }
+    }
+
+
     public List<AddFollowersWrapper> getAllFollowingByUserIdAndFollowId(int userId, int followId) {
         List<AddFollowersWrapper> list = new ArrayList<>();
         List<AddFollowers> addFollowersList = addFollowRepo.findByUser_IdAndFollowedId(userId, followId);
@@ -60,13 +84,16 @@ public class AddFollowService {
                     addFollowers.getUser().getId(),
                     addFollowers.getFollowedId(),
                     addFollowers.getType().toString()
+
             );
             list.add(wrapper);
+
         }
         return list;
     }
 
     //This method is use to get compelete follow data
+
     public List<AddFollowersWrapper> getAllFollowersByUserId(int userId) {
         List<AddFollowersWrapper> list = new ArrayList<>();
         for (AddFollowers user : addFollowRepo.findByUser_Id(userId)) {
@@ -79,15 +106,16 @@ public class AddFollowService {
         System.out.println("This is My User Id Mean My Follow ID : " + userId);
         List<UserWrapper> userWrapper = new ArrayList<>();
         UserWrapper addFollowersWrapper = new UserWrapper();
-//Int above 3 line i change to display image at all side
+        //Int above 3 line i change to display image at all side
         for (AddFollowers followers : addFollowRepo.findByFollowedId(userId)) {
             User user = userRepository.findById(followers.getUser().getId()).get();
             addFollowersWrapper.setId(user.getId());
-            System.out.println(user.getId());
+            System.out.println(user.getType());
             addFollowersWrapper.setStringImageFile("data:image/png;base64," + Base64.getEncoder().encodeToString(user.getImage_data()));
             addFollowersWrapper.setFirst_name(user.getFirst_name());
             addFollowersWrapper.setLast_name(user.getLast_name());
             addFollowersWrapper.setCity(user.getCity());
+            addFollowersWrapper.setFollowType(followers.getType().toString());
             userWrapper.add(addFollowersWrapper);
             System.out.println(addFollowersWrapper.getId() + " ADDFOLLOWER");
         }
