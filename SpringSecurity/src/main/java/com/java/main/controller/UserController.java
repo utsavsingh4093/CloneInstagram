@@ -93,7 +93,8 @@ public class UserController {
             model.addAttribute("username", validUser.getFirst_name() + " " + validUser.getLast_name());
             model.addAttribute("userdata", validUser.getId());
             System.out.println(validUser.getId() + " here i am getting user id");
-            return "redirect:/homeData/" + validUser.getId(); // Redirect to getdata with user ID
+            // Redirect to getdata with user ID
+            return "redirect:/homeData/" + validUser.getId();
 
         } else {
             model.addAttribute("errorMsg", "Wrong email and password");

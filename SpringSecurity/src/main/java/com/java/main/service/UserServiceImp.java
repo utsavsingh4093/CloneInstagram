@@ -56,21 +56,21 @@ public class UserServiceImp{
         return null;
     }
 
-    public List<User> findListOfUser() {
-        return userRepository.findAll();
-    }
+//    public List<User> findListOfUser() {
+//        return userRepository.findAll();
+//    }
 
     public Optional<User> getUserById(int id) {
         return userRepository.findById(id); // Assuming you're using JpaRepository
     }
 
-    public User getAllProductById(int id) {
-        return null;
-    }
-
-    public Optional<User> findById(int id) {
-        return userRepository.findById(id);
-    }
+//    public User getAllProductById(int id) {
+//        return null;
+//    }
+//
+//    public Optional<User> findById(int id) {
+//        return userRepository.findById(id);
+//    }
 
     public List<UserWrapper> getUserList()
     {

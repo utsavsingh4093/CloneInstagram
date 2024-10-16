@@ -104,21 +104,20 @@ public class AddFollowService {
 
     public List<UserWrapper> getAllFollowersByUserIds(int userId) {
         System.out.println("This is My User Id Mean My Follow ID : " + userId);
-        List<UserWrapper> userWrapper = new ArrayList<>();
-        UserWrapper addFollowersWrapper = new UserWrapper();
+        List<UserWrapper> listUser = new ArrayList<>();
+        UserWrapper userWrapper = null;
         //Int above 3 line i change to display image at all side
         for (AddFollowers followers : addFollowRepo.findByFollowedId(userId)) {
+            userWrapper = new UserWrapper();
             User user = userRepository.findById(followers.getUser().getId()).get();
-            addFollowersWrapper.setId(user.getId());
-            System.out.println(user.getType());
-            addFollowersWrapper.setStringImageFile("data:image/png;base64," + Base64.getEncoder().encodeToString(user.getImage_data()));
-            addFollowersWrapper.setFirst_name(user.getFirst_name());
-            addFollowersWrapper.setLast_name(user.getLast_name());
-            addFollowersWrapper.setCity(user.getCity());
-            addFollowersWrapper.setFollowType(followers.getType().toString());
-            userWrapper.add(addFollowersWrapper);
-            System.out.println(addFollowersWrapper.getId() + " ADDFOLLOWER");
+            userWrapper.setId(user.getId());
+            userWrapper.setStringImageFile("data:image/png;base64," + Base64.getEncoder().encodeToString(user.getImage_data()));
+            userWrapper.setFirst_name(user.getFirst_name());
+            userWrapper.setLast_name(user.getLast_name());
+            userWrapper.setCity(user.getCity());
+            userWrapper.setFollowType(followers.getType().toString());
+            listUser.add(userWrapper);
         }
-        return userWrapper;
+        return listUser;
     }
 }
