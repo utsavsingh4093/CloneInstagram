@@ -103,7 +103,7 @@ public class UserController {
 //    }
 
 
-<<<<<<< HEAD
+
 //    @GetMapping("/logout")
 //    public String logoutForm(HttpServletRequest request) {
 //        HttpSession session = request.getSession(false);
@@ -112,75 +112,73 @@ public class UserController {
 //        }
 //        return "redirect:/login";
 //    }
-=======
-    @GetMapping("/homepage")
-    public String openHomePage(@SessionAttribute("userdata") Integer userId,Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            model.addAttribute("user", user);
-            List<AddPost> posts=addPostService.findListOfPostData(userId);
-
-            for(AddPost getPost : posts)
-            {
-                String img= Base64.getEncoder().encodeToString(getPost.getImage_data());
-                getPost.setImage_string_data("data:image/png;base64,"+img);
-                System.out.println("Post ID: " + getPost.getPostId() + ", Name: " + getPost.getPost_name());
-            }
-             model.addAttribute("username",user.getFirst_name()+" "+user.getLast_name());
-            model.addAttribute("getPost",posts);
-            return "homepage";
-        } else {
-            return "redirect:/login"; // Redirect to login if session expired
-        }
-    }
-
-
-    @GetMapping("/login")
-    public String openLoginPage(Model model) {
-        model.addAttribute("user", new User());//it will use to transfer the value from one page to other page
-        return "login";
-    }
-
-
-    @PostMapping("/regForm")
-    public String getRegisterForm(@ModelAttribute("user") User user, @RequestParam("profileImage") MultipartFile file, Model model) throws IOException {
-        if (!file.isEmpty()) {
-            user.setImage_type(file.getContentType());
-            user.setImage_name(file.getOriginalFilename());
-            user.setImage_data(file.getBytes());
-        }
-        User student1 = userServiceImp.registerUser(user);
-        System.out.println(student1.getFirst_name());
-        //  model.addAttribute("name",student1.getFirst_name()+" "+student1.getLast_name());
-        return "login";
-    }
-
-    @PostMapping("/logForm")
-    public String submitLoginForm(@ModelAttribute("user") User user, Model model) {
-        User validUser = userServiceImp.loginUser(user.getEmail(), user.getPassword());
-        if (validUser != null) {
-            model.addAttribute("username", validUser.getFirst_name() + " " + validUser.getLast_name());
-            model.addAttribute("userdata", validUser.getId());
-            System.out.println(validUser.getId() + " here i am getting user id");
-            // Redirect to getdata with user ID
-            return "redirect:/homeData/" + validUser.getId();
-
-        } else {
-            model.addAttribute("errorMsg", "Wrong email and password");
-            return "login";
-        }
-    }
-
-
-    @GetMapping("/logout")
-    public String logoutForm(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        return "redirect:/login";
-    }
->>>>>>> origin/main
+//    @GetMapping("/homepage")
+//    public String openHomePage(@SessionAttribute("userdata") Integer userId,Model model, HttpSession session) {
+//        User user = (User) session.getAttribute("user");
+//        if (user != null) {
+//            model.addAttribute("user", user);
+//            List<AddPost> posts=addPostService.findListOfPostData(userId);
+//
+//            for(AddPost getPost : posts)
+//            {
+//                String img= Base64.getEncoder().encodeToString(getPost.getImage_data());
+//                getPost.setImage_string_data("data:image/png;base64,"+img);
+//                System.out.println("Post ID: " + getPost.getPostId() + ", Name: " + getPost.getPost_name());
+//            }
+//             model.addAttribute("username",user.getFirst_name()+" "+user.getLast_name());
+//            model.addAttribute("getPost",posts);
+//            return "homepage";
+//        } else {
+//            return "redirect:/login"; // Redirect to login if session expired
+//        }
+//    }
+//
+//
+//    @GetMapping("/login")
+//    public String openLoginPage(Model model) {
+//        model.addAttribute("user", new User());//it will use to transfer the value from one page to other page
+//        return "login";
+//    }
+//
+//
+//    @PostMapping("/regForm")
+//    public String getRegisterForm(@ModelAttribute("user") User user, @RequestParam("profileImage") MultipartFile file, Model model) throws IOException {
+//        if (!file.isEmpty()) {
+//            user.setImage_type(file.getContentType());
+//            user.setImage_name(file.getOriginalFilename());
+//            user.setImage_data(file.getBytes());
+//        }
+//        User student1 = userServiceImp.registerUser(user);
+//        System.out.println(student1.getFirst_name());
+//        //  model.addAttribute("name",student1.getFirst_name()+" "+student1.getLast_name());
+//        return "login";
+//    }
+//
+//    @PostMapping("/logForm")
+//    public String submitLoginForm(@ModelAttribute("user") User user, Model model) {
+//        User validUser = userServiceImp.loginUser(user.getEmail(), user.getPassword());
+//        if (validUser != null) {
+//            model.addAttribute("username", validUser.getFirst_name() + " " + validUser.getLast_name());
+//            model.addAttribute("userdata", validUser.getId());
+//            System.out.println(validUser.getId() + " here i am getting user id");
+//            // Redirect to getdata with user ID
+//            return "redirect:/homeData/" + validUser.getId();
+//
+//        } else {
+//            model.addAttribute("errorMsg", "Wrong email and password");
+//            return "login";
+//        }
+//    }
+//
+//
+//    @GetMapping("/logout")
+//    public String logoutForm(HttpServletRequest request) {
+//        HttpSession session = request.getSession(false);
+//        if (session != null) {
+//            session.invalidate();
+//        }
+//        return "redirect:/login";
+//    }
 
     @GetMapping("/users/{id}/image")
     public ResponseEntity<ByteArrayResource> getUserImage(@PathVariable int id) {
