@@ -42,7 +42,6 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active"><a class="nav-link" th:href="@{/homepage}">Home</a></li>
             &nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa
-
             <li class="nav-item">
                 <button
                         style="border-radius: 29px; height: 45px; width: 100px; margin-top: 10px; padding-block-end: 22px; text-align: center;"
@@ -53,7 +52,9 @@
         </ul>
     </div>
 </nav>
-
+<div class="mb-3">
+    <a th:href="@{/view}" class="btn btn-secondary">Back</a>
+</div>
 Welcome... <span th:text="${username}"></span>
 This is My User Id : <span th:text="${userId}"></span>
 <div class="container text-center">

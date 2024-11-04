@@ -47,7 +47,9 @@
         <a class="btn btn-outline-danger ms-auto" th:href="@{/logout}" style="color: whitesmoke;">LogOut</a>
     </div>
 </nav>
-
+<div class="mb-3">
+    <a th:href="@{/view}" class="btn btn-secondary">Back</a>
+</div>
 Welcome... <span th:text="${username}"></span>
 <span th:text="${userId}"></span>
 
