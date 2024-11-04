@@ -34,7 +34,6 @@
 
             <li class="nav-item active"><a class="nav-link" href="register">Register<span class="sr-only"></span>
             </a></li>
-
             &nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa&nspa
 
             <li class="nav-item">
@@ -49,34 +48,55 @@
 </nav>
 <br>
 <h2 style="text-align: center;">Login Form</h2>
+<div id="errorMsg" class="alert alert-danger" style="display: none;"></div>
 
-<form class="container col-lg-3 " th:action="@{/logForm}" th:object="${user}" method="post">
-    <!-- Email input -->
-
-    <div data-mdb-input-init class="form-outline mb-4">
-        <label class="form-label" for="form2Example1">Email</label>
-        <input type="email" id="form2Example1" class="form-control" placeholder="Enter a Email" th:field="*{email}"/>
-
+<form class="col-lg-4 mx-auto" id="loginForm">
+    <div class="form-outline mb-4">
+        <label class="form-label" for="email">Email</label>
+        <input type="email" id="email" class="form-control" placeholder="Enter your Email" required/>
     </div>
-
-    <!-- Password input -->
-    <div data-mdb-input-init class="form-outline mb-4">
-        <label class="form-label" for="form2Example1">Password</label>
-        <input type="password" id="form2Example2" class="form-control" placeholder="Enter a Password" th:field="*{password}"/>
+    <div class="form-outline mb-4">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Enter your Password" required/>
     </div>
-    </div>
-
-    <br><br>
-    <div>
-        <button style="margin-left: 40%;" class="btn btn-primary" type="submit">Login</button>
-    </div>
-
-    <!-- Register buttons -->
     <div class="text-center">
-        <p>Not a member? <a href="register">Register</a></p>
+        <button class="btn btn-primary" type="submit">Login</button>
     </div>
 </form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#loginForm').on('submit', function(event) {
+            event.preventDefault();
+
+            // Collect form data
+            const email = $('#email').val();
+            const password = $('#password').val();
+
+            // Create a user object
+            const user = {
+                email: email,
+                password: password
+            };
+
+            // AJAX request
+            $.ajax({
+                url: '/logForm',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(user),
+                success: function(response) {
+                    window.location.href = 'homepage';
+                },
+                error: function(xhr) {
+                    $('#errorMsg').text(xhr.responseText).show();
+                }
+            });
+        });
+    });
+</script>
 </body>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

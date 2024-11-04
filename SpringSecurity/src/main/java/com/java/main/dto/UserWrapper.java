@@ -1,4 +1,4 @@
-package com.java.main.entity;
+package com.java.main.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +17,5 @@ public class UserWrapper {
     private String password;
     private String stringImageFile;
     private String followType;
-
-
+    private String username;
 }

@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Component
-//@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +24,9 @@ public class User {
     private String city;
     private String state;
     private String password;
-    //For adding the profile
     private String image_name;
     private String image_type;
+    private String userName;
     @Lob
     private byte[] image_data;
     @Lob
@@ -44,17 +43,15 @@ public class User {
         UNFOLLOW
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // Add this to link to AddPost
-    private List<AddPost> posts;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<PostComment> comments;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<AddPost> posts;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // Change this
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<AddFollowers> followers;
-
-
+    private String recaptcha;
     public User(int userId) {
         this.id=userId;
     }

@@ -24,72 +24,70 @@ public class AddingPost {
     @Autowired
     UserServiceImp userServiceImp;
 
-    @GetMapping("/addPost")
-    public String getPost(Model model, @SessionAttribute("userdata") Integer userId) {
-        System.out.println("jksdba alsdnf "+userId);
-        model.addAttribute("addPost", new AddPost());
-        return "addPost";
-    }
+//    @GetMapping("/addPost")
+//    public String getPost(Model model, @SessionAttribute("userdata") Integer userId) {
+//        System.out.println("jksdba alsdnf "+userId);
+//        model.addAttribute("addPost", new AddPost());
+//        return "addPost";
+//    }
 
-    @PostMapping("/addPostForm")
-    public String addingDataOnAddPost(@ModelAttribute("addPost") AddPost addPost, @RequestParam("profileImage") MultipartFile imageFile, @SessionAttribute("userdata") Integer userId, Model model) throws IOException {
-        if (!imageFile.isEmpty()) {
-            //There i,am getting the data and setting the data in it user
+//    @PostMapping("/addPostForm")
+//    public String addingDataOnAddPost(@ModelAttribute("addPost") AddPost addPost, @RequestParam("profileImage") MultipartFile imageFile, @SessionAttribute("userdata") Integer userId, Model model) throws IOException {
+//        if (!imageFile.isEmpty()) {
+//            System.out.println("That : "+userId);
+//            User user = userServiceImp.getById(userId);
+//            if (user != null) {
+//                addPost.setUser(user);
+//            }
+//            addPost.setImage_type(imageFile.getContentType());
+//            addPost.setImage_name(imageFile.getOriginalFilename());
+//            addPost.setImage_data(imageFile.getBytes());
+//
+//            AddPost savePost = addPostService.addPostData(addPost);
+//            System.out.println(savePost.getPost_name());
+//        }
+//        return "redirect:/homepage";
+//    }
 
-            System.out.println("That : "+userId);
-            User user = userServiceImp.getById(userId);
-            if (user != null) {
-                addPost.setUser(user);
-            }
-            addPost.setImage_type(imageFile.getContentType());
-            addPost.setImage_name(imageFile.getOriginalFilename());
-            addPost.setImage_data(imageFile.getBytes());
+//    @GetMapping("/viewPosts")
+//    public String findListOfPost(@SessionAttribute("userdata") Integer userId , Model model) {
+//        Optional<User> user=userServiceImp.getUserById(userId);
+//
+//        List<AddPost> posts = addPostService.findListOfPostData(userId);
+//        System.out.println("This is User ID : "+userId +" :  : ");
+//        System.out.println(userId+ " Here i am Getting my id");
+//        model.addAttribute("userId", userId);
+//        model.addAttribute("username",user.get().getFirst_name()+" "+user.get().getLast_name());
+//
+//
+//        for (AddPost post : posts) {
+//            String img = Base64.getEncoder().encodeToString(post.getImage_data());
+//            post.setImage_string_data("data:image/png;base64,"+img);
+//            System.out.println("Post ID: " + post.getPostId() + ", Name: " + post.getPost_name());
+//        }
+//        model.addAttribute("addPost",posts);
+//        return "viewPosts";
+//    }
 
-            AddPost savePost = addPostService.addPostData(addPost);
-            System.out.println(savePost.getPost_name());
-        }
-        return "redirect:/homepage";
-    }
-
-    @GetMapping("/viewPosts")
-    public String findListOfPost(@SessionAttribute("userdata") Integer userId , Model model) {
-        Optional<User> user=userServiceImp.getUserById(userId);
-
-        List<AddPost> posts = addPostService.findListOfPostData(userId);
-        System.out.println("This is User ID : "+userId +" :  : ");
-        System.out.println(userId+ " Here i am Getting my id");
-        model.addAttribute("userId", userId);
-        model.addAttribute("username",user.get().getFirst_name()+" "+user.get().getLast_name());
-
-
-        for (AddPost post : posts) {
-            String img = Base64.getEncoder().encodeToString(post.getImage_data());
-            post.setImage_string_data("data:image/png;base64,"+img);
-            System.out.println("Post ID: " + post.getPostId() + ", Name: " + post.getPost_name());
-        }
-        model.addAttribute("addPost",posts);
-        return "viewPosts";
-    }
-
-    @GetMapping("/viewPost")
-    public String findPostAccordingToUserId(@RequestParam int userId,Model model)
-    {
-        System.out.println("uherk adsjkb : "+ userId);
-        Optional<User> user=userServiceImp.getUserById(userId);
-
-        List<AddPost> posts = addPostService.findListOfPostData(userId);
-        System.out.println("This is User ID : "+userId +" :  : ");
-        System.out.println(userId+ " Here i am Getting my id");
-        model.addAttribute("userId", userId);
-        model.addAttribute("username",user.get().getFirst_name()+" "+user.get().getLast_name());
-
-
-        for (AddPost post : posts) {
-            String img = Base64.getEncoder().encodeToString(post.getImage_data());
-            post.setImage_string_data("data:image/png;base64,"+img);
-            System.out.println("Post ID: " + post.getPostId() + ", Name: " + post.getPost_name());
-        }
-        model.addAttribute("addPost",posts);
-        return "viewPosts";
-    }
+//    @GetMapping("/viewPost")
+//    public String findPostAccordingToUserId(@RequestParam int userId,Model model)
+//    {
+//        System.out.println("uherk adsjkb : "+ userId);
+//        Optional<User> user=userServiceImp.getUserById(userId);
+//
+//        List<AddPost> posts = addPostService.findListOfPostData(userId);
+//        System.out.println("This is User ID : "+userId +" :  : ");
+//        System.out.println(userId+ " Here i am Getting my id");
+//        model.addAttribute("userId", userId);
+//        model.addAttribute("username",user.get().getFirst_name()+" "+user.get().getLast_name());
+//
+//
+//        for (AddPost post : posts) {
+//            String img = Base64.getEncoder().encodeToString(post.getImage_data());
+//            post.setImage_string_data("data:image/png;base64,"+img);
+//            System.out.println("Post ID: " + post.getPostId() + ", Name: " + post.getPost_name());
+//        }
+//        model.addAttribute("addPost",posts);
+//        return "viewPosts";
+//    }
 }

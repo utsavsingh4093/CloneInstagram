@@ -16,7 +16,7 @@ import java.util.List;
 public class AddPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int postId; // This must match the method name
+    private int postId;
 
     private String post_name;
     private String caption;
@@ -35,7 +35,6 @@ public class AddPost {
     private User user;
 
     private int likesCount;
-
     @OneToMany(mappedBy = "addPost", cascade = CascadeType.ALL)
     private List<PostComment> comments;
 

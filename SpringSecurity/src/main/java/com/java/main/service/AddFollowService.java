@@ -1,9 +1,9 @@
 package com.java.main.service;
 
 import com.java.main.entity.AddFollowers;
-import com.java.main.entity.AddFollowersWrapper;
+import com.java.main.dto.AddFollowersWrapper;
 import com.java.main.entity.User;
-import com.java.main.entity.UserWrapper;
+import com.java.main.dto.UserWrapper;
 import com.java.main.repository.AddFollowRepo;
 import com.java.main.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,6 @@ public class AddFollowService {
             addFollowRepo.delete(existingFollowers.get(0));
             return "Follow removed successfully.";
         } else {
-            // If not following, add a new follow with FOLLOWING type
             AddFollowers addFollowers = new AddFollowers();
             addFollowers.setFollowedId(followedId);
             addFollowers.setUser(user);
@@ -56,11 +55,9 @@ public class AddFollowService {
         List<AddFollowers> existingFollowers = addFollowRepo.findByUser_IdAndFollowedId(userId, followedId);
 
         if (existingFollowers.isEmpty()) {
-            // User is not following, so do nothing or handle as needed
-            // You might want to add a follow entry if necessary.
+            System.out.println("Empty USer");
         } else {
             AddFollowers followEntry = existingFollowers.get(0);
-
             if (followEntry.getType() == AddFollowers.FollowType.FOLLOWING) {
                 // User is currently FOLLOWING, so set it to UNFOLLOW
                 followEntry.setType(AddFollowers.FollowType.UNFOLLOW);
@@ -84,7 +81,6 @@ public class AddFollowService {
                     addFollowers.getUser().getId(),
                     addFollowers.getFollowedId(),
                     addFollowers.getType().toString()
-
             );
             list.add(wrapper);
 
@@ -96,7 +92,7 @@ public class AddFollowService {
 
     public List<AddFollowersWrapper> getAllFollowersByUserId(int userId) {
         List<AddFollowersWrapper> list = new ArrayList<>();
-        for (AddFollowers user : addFollowRepo.findByUser_Id(userId)) {
+        for (AddFollowers user : addFollowRepo.findByFollowedId(userId)) {
             list.add(new AddFollowersWrapper(user.getFollowId(), user.getUser().getId(), user.getFollowedId(), user.getType().toString()));
         }
         return list;
@@ -104,21 +100,21 @@ public class AddFollowService {
 
     public List<UserWrapper> getAllFollowersByUserIds(int userId) {
         System.out.println("This is My User Id Mean My Follow ID : " + userId);
-        List<UserWrapper> userWrapper = new ArrayList<>();
-        UserWrapper addFollowersWrapper = new UserWrapper();
+        List<UserWrapper> listUser = new ArrayList<>();
+        UserWrapper userWrapper = null;
         //Int above 3 line i change to display image at all side
         for (AddFollowers followers : addFollowRepo.findByFollowedId(userId)) {
+            userWrapper = new UserWrapper();
             User user = userRepository.findById(followers.getUser().getId()).get();
-            addFollowersWrapper.setId(user.getId());
-            System.out.println(user.getType());
-            addFollowersWrapper.setStringImageFile("data:image/png;base64," + Base64.getEncoder().encodeToString(user.getImage_data()));
-            addFollowersWrapper.setFirst_name(user.getFirst_name());
-            addFollowersWrapper.setLast_name(user.getLast_name());
-            addFollowersWrapper.setCity(user.getCity());
-            addFollowersWrapper.setFollowType(followers.getType().toString());
-            userWrapper.add(addFollowersWrapper);
-            System.out.println(addFollowersWrapper.getId() + " ADDFOLLOWER");
+            userWrapper.setId(user.getId());
+            userWrapper.setStringImageFile("data:image/png;base64," + Base64.getEncoder().encodeToString(user.getImage_data()));
+            userWrapper.setFirst_name(user.getFirst_name());
+            userWrapper.setLast_name(user.getLast_name());
+            userWrapper.setCity(user.getCity());
+            userWrapper.setFollowType(followers.getType().toString());
+            listUser.add(userWrapper);
         }
-        return userWrapper;
+        return listUser;
     }
+
 }
