@@ -46,7 +46,7 @@
             // Collect form data
             const email = $('#email').val();
             const password = $('#password').val();
-            const recaptchaResponse = grecaptcha.getResponse(); // Get the reCAPTCHA response
+            const recaptchaResponse = grecaptcha.getResponse();
 
             if (recaptchaResponse.length === 0) {
                 $('#errorMsg').text('Please complete the reCAPTCHA.').show();
@@ -57,7 +57,7 @@
             const user = {
                 email: email,
                 password: password,
-                recaptchaResponse: recaptchaResponse // Include reCAPTCHA response
+                recaptchaResponse: recaptchaResponse
             };
 
             // AJAX request
@@ -67,10 +67,10 @@
                 contentType: 'application/json',
                 data: JSON.stringify(user),
                 success: function(response) {
-                    window.location.href = 'homepage'; // Redirect on success
+                    window.location.href = 'homepage';
                 },
                 error: function(xhr) {
-                    $('#errorMsg').text(xhr.responseText).show(); // Show error message
+                    $('#errorMsg').text(xhr.responseText).show();
                 }
             });
         });
