@@ -57,6 +57,10 @@ public class AddPostService {
     }
 
     public Optional<AddPost> getUserById(int id) {
+<<<<<<< HEAD
         return addPostsRepository.findById(id);
+=======
+        return addPostsRepository.findById(id); // using their JpaRepository
+>>>>>>> origin/main
     }
 }
