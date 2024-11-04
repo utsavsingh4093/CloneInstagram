@@ -4,11 +4,9 @@ import com.java.main.dto.CommentWrapper;
 import com.java.main.dto.LikeWrapper;
 import com.java.main.dto.PostWrapper2;
 import com.java.main.entity.AddPost;
+import com.java.main.entity.ReCaptchResponseType;
 import com.java.main.entity.User;
-import com.java.main.service.AddCommentService;
-import com.java.main.service.AddPostService;
-import com.java.main.service.PostLikeService;
-import com.java.main.service.UserServiceImp;
+import com.java.main.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +35,9 @@ public class GetForUserController {
     AddPostService addPostService;
     @Autowired
     TemplateEngine templateEngine;
+
+    @Autowired
+    private ReCaptchaValidationService reCaptchaValidationService;
 
     @GetMapping(value = "/homepage1",produces = {"application/json","text/html"})
     public ResponseEntity<Object> openHomePage(Map<String,Object> map, HttpSession session, @RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
@@ -242,18 +243,26 @@ public class GetForUserController {
             @RequestBody User user,
             HttpSession httpSession,
             @RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
+        boolean isCaptchaValid = reCaptchaValidationService.validateCaptcha(user.getRecaptchaResponse());
+        if (!isCaptchaValid) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid reCAPTCHA. Please try again.");
+        }
 
-        Map<String,Object> map=new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         User validUser = userServiceImp.loginUser(user.getEmail(), user.getPassword());
-        System.out.println(validUser.getId());
-        Optional<User> fetchedUser = userServiceImp.getUserById(validUser.getId());
 
+        if (validUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid username or password.");
+        }
+
+        Optional<User> fetchedUser = userServiceImp.getUserById(validUser.getId());
         if (fetchedUser.isPresent()) {
             List<AddPost> posts = addPostService.findListOfPostData(validUser.getId());
             for (AddPost getPost : posts) {
                 String img = Base64.getEncoder().encodeToString(getPost.getImage_data());
                 getPost.setImage_string_data("data:image/png;base64," + img);
-                System.out.println("Post ID: " + getPost.getPostId() + ", Name: " + getPost.getPost_name());
             }
             map.put("getPost", posts);
             map.put("getUserId", fetchedUser.get().getId());
@@ -261,8 +270,8 @@ public class GetForUserController {
             map.put("userdata", validUser.getId());
             map.put("username", fetchedUser.get().getFirst_name() + " " + fetchedUser.get().getLast_name());
             httpSession.setAttribute("user", fetchedUser.get());
-            httpSession.setAttribute("userusername", fetchedUser.get());
         }
+
         if (acceptHeader.contains("application/json")) {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)

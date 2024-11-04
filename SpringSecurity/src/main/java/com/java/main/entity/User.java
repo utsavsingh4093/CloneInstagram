@@ -51,7 +51,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<AddFollowers> followers;
-    private String recaptcha;
+    @Transient
+    private String recaptchaResponse;
     public User(int userId) {
         this.id=userId;
     }
