@@ -29,6 +29,20 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
+    <div class="d-flex">
+        <input class="form-control me-2" type="search" id="searchInput" placeholder="Search" aria-label="Search">
+    </div>
+
+    <script>
+        var userId = [[${getUserId}]];  // here is the Thymeleaf expression to get the userId
+
+        document.getElementById("searchInput").addEventListener("focus", function() {
+            window.location.href = "/listFollow?userId=" + userId;
+        });
+    </script>
+
+
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto">
             <li class="nav-item active"><a class="nav-link" th:href="@{/homepage}">Home</a></li>
@@ -38,11 +52,6 @@
             </form>
         </ul>
         <ul class="navbar-nav ms-auto d-flex align-items-center">
-            <!-- Search Form -->
-            <form class="d-flex me-3" th:action="@{/search}" method="get">
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="query" required>
-                <button class="btn btn-outline-light" type="submit">Search</button>
-            </form>
             <li class="nav-item">
                 <a class="btn btn-outline-danger my-2 my-sm-0" th:href="@{/logout}" style="color: whitesmoke;">Logout</a>
             </li>

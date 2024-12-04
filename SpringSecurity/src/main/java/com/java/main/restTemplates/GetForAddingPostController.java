@@ -1,8 +1,10 @@
 package com.java.main.restTemplates;
 
 import com.java.main.dto.PostWrapper;
+import com.java.main.dto.UserWrapper;
 import com.java.main.entity.AddPost;
 import com.java.main.entity.User;
+import com.java.main.service.AddFollowService;
 import com.java.main.service.AddPostService;
 import com.java.main.service.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,8 @@ public class GetForAddingPostController {
     UserServiceImp userServiceImp;
     @Autowired
     TemplateEngine templateEngine;
-
+    @Autowired
+    AddFollowService addFollowService;
 
     @GetMapping(value = "/addPost" , produces = {"application/json","text/html"})
     public ResponseEntity<Object> getPost(@RequestParam("userId") Integer userId,
@@ -89,6 +92,28 @@ public class GetForAddingPostController {
         System.out.println(userId+ " Here i am Getting my id");
         Map<String,Object> map=new HashMap<>();
         map.put("userId", userId);
+        List<UserWrapper> followers = addFollowService.getAllFollowersByUserIds(user.get().getId());
+
+        List<UserWrapper> following=userServiceImp.getUserList();
+        System.out.println("Number of users fetched: " + following);
+
+        int followingCount = 0;//Both count following and unfollow
+
+        for(UserWrapper userWrapper : following){
+            if(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId())!=null){
+                userWrapper.setFollowType(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId()).getType().toString());
+                if (userWrapper.getFollowType().equals(User.FollowType.FOLLOWING.toString()) || userWrapper.getFollowType().equals((User.FollowType.UNFOLLOW.toString()))) {
+                    followingCount++;
+                }
+            }else{
+                userWrapper.setFollowType(User.FollowType.FOLLOW.toString());
+            }
+        }
+        System.out.println(followingCount +" YTHOsali ioaj a");
+        map.put("followingCount", followingCount);
+        map.put("postCount",posts.size());
+        map.put("user",user.get());
+        map.put("followersCount", followers.size());
         map.put("username",user.get().getUserName());
         map.put("usernames",user.get().getFirst_name()+" "+user.get().getLast_name());
         List<PostWrapper> postWrappers=new ArrayList<>();
@@ -130,10 +155,32 @@ public class GetForAddingPostController {
         Optional<User> user=userServiceImp.getUserById(userId);
         Optional<User> getCurrentUserName=userServiceImp.getUserById(userID);
         List<AddPost> posts = addPostService.findListOfPost(userId);
-        System.out.println("This is User ID : "+userId +" :  : ");
+        System.out.println("This is User ID : "+userId +" :  : " + posts.size());
         System.out.println(userId+ " Here i am Getting my id");
         Map<String,Object> map=new HashMap<>();
         map.put("userId", userId);
+        List<UserWrapper> followers = addFollowService.getAllFollowersByUserIds(user.get().getId());
+
+        List<UserWrapper> following=userServiceImp.getUserList();
+        System.out.println("Number of users fetched: " + following);
+
+        int followingCount = 0;//Both count following and unfollow
+
+        for(UserWrapper userWrapper : following){
+            if(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId())!=null){
+                userWrapper.setFollowType(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId()).getType().toString());
+                if (userWrapper.getFollowType().equals(User.FollowType.FOLLOWING.toString()) || userWrapper.getFollowType().equals((User.FollowType.UNFOLLOW.toString()))) {
+                    followingCount++;
+                }
+            }else{
+                userWrapper.setFollowType(User.FollowType.FOLLOW.toString());
+            }
+        }
+        System.out.println(followingCount +" YTHOsali ioaj a");
+        map.put("followingCount", followingCount);
+        map.put("postCount",posts.size());
+        map.put("user",user.get());
+        map.put("followersCount", followers.size());
         map.put("username",getCurrentUserName.get().getUserName());
         map.put("usernames",user.get().getFirst_name()+" "+user.get().getLast_name());
         List<PostWrapper> postWrappers=new ArrayList<>();

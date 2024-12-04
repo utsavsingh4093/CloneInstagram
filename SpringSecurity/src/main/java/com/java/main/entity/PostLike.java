@@ -18,6 +18,6 @@ public class PostLike {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "fk_post_id", referencedColumnName = "postId") // Ensure this is correct
-    private AddPost addPost; // This should match the field name in AddPost
+    @JoinColumn(name = "fk_post_id", referencedColumnName = "postId")
+    private AddPost addPost;
 }

@@ -39,7 +39,26 @@
 <div class="mb-3">
     <a th:href="@{/view}" class="btn btn-secondary">Back</a>
 </div>
-<h1>Welcome <span th:text="${usernames}"></span></h1>
+
+<div id="carouselExampleCaptions" class="carousel slide carousel-fade" style="height: 70px; width: 500px;" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active" style="border-radius: 10px;">
+            <!-- Flexbox container to align image and text side by side -->
+            <div class="d-flex align-items-center">
+                <!-- Circular Image -->
+                <img th:src="@{/user/{id}/image(id=${user.id})}" alt="Profile"
+                     style="border-radius: 50%; width: 40%; height: 100%; object-fit: cover;">
+                <div class="ml-3">
+                    <h6>Followers: <span th:text="${followersCount}"></span></h6>
+                    <h6>Following: <span th:text="${followingCount}"></span></h6>
+                    <h6>Posts: <span th:text="${postCount}"></span></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1>Welcome <span th:text="${usernames}"></span></h1>-->
 <div class="container mt-4">
     <h1 class="text-center my-4" style="color:blue;">This is Your Posts</h1>
     <div class="row justify-content-center">

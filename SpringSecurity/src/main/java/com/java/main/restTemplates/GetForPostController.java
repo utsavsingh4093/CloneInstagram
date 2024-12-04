@@ -168,7 +168,7 @@ public class GetForPostController {
         System.out.println(followingCount +" YTHOsali ioaj a");
         map.put("followingCount", followingCount);
         map.put("user",user.get());
-        map.put("followersCount", followers.size()); // Add followers count
+        map.put("followersCount", followers.size());
         map.put("getUserId",id);
         map.put("username",user.get().getFirst_name()+" "+user.get().getLast_name());
         httpSession.setAttribute("user",user.get());

@@ -58,7 +58,9 @@
 
         <div class="col-md-12 position-relative">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+            <input type="email" class="form-control" id="email" name="email" required
+                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                   title="Please enter a valid email address.">
             <div class="invalid-tooltip">Please provide a valid email.</div>
         </div>
 
@@ -106,6 +108,15 @@
 <script>
     $(document).ready(function() {
         $('#submitForm').on('click', function() {
+            // Validate email format
+            var email = $('#email').val();
+            var emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+
+            if (!emailPattern.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
             var formData = new FormData($('#registrationForm')[0]);
 
             $.ajax({

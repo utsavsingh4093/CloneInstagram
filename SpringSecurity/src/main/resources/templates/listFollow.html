@@ -31,7 +31,7 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
     <a class="navbar-brand" href="#">Friend Book</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -40,6 +40,9 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
+        <input style="width: 200px;" class="form-control me-2" type="text" id="search" placeholder="Search user..." aria-label="Search">
+
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto">
             <li class="nav-item active"><a class="nav-link" th:href="@{/homepage}">Home</a></li>
@@ -47,6 +50,7 @@
         <a class="btn btn-outline-danger ms-auto" th:href="@{/logout}" style="color: whitesmoke;">LogOut</a>
     </div>
 </nav>
+
 <div class="mb-3">
     <a th:href="@{/view}" class="btn btn-secondary">Back</a>
 </div>
@@ -54,8 +58,6 @@ Welcome... <span th:text="${username}"></span>
 <span th:text="${userId}"></span>
 
 <div class="container text-center">
-    <input style="width:150px;" type="text" id="search" class="form-control mb-4" placeholder="Search user..." />
-
     <div class="row" id="user-list" th:each="user : ${getAllUserForFollow}">
         <div class="col-md-4 user-item" th:if="${user.id} != ${userId}">
             <form th:action="@{/listFollowing}" method="post">

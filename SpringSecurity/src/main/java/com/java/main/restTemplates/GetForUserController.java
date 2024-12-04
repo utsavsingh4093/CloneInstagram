@@ -35,74 +35,66 @@ public class GetForUserController {
     AddPostService addPostService;
     @Autowired
     TemplateEngine templateEngine;
-
     @Autowired
     private ReCaptchaValidationService reCaptchaValidationService;
 
-    @GetMapping(value = "/homepage1",produces = {"application/json","text/html"})
-    public ResponseEntity<Object> openHomePage(Map<String,Object> map, HttpSession session, @RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
-        User user = (User) session.getAttribute("user");
-        System.out.println(user.getId()+" afn afa adfqa");
-            map.put("user", user);
-            List<AddPost> posts=addPostService.findListOfPostData(user.getId());
-        List<PostWrapper2> postWrappers2 = new ArrayList<>();
-        for (AddPost getPost : posts) {
-            PostWrapper2 addPostData = new PostWrapper2();
-            addPostData.setPostId(getPost.getPostId());
-            addPostData.setPost_name(getPost.getPost_name());
-            addPostData.setLikesCount(getPost.getLikesCount());
-            addPostData.setUserName(getPost.getUser().getFirst_name());
-            addPostData.setImage_name(getPost.getImage_name());
-            addPostData.setCaption(getPost.getCaption());
-            if (getPost.getImage_data() != null) {
-                String img = Base64.getEncoder().encodeToString(getPost.getImage_data());
-                getPost.setImage_string_data("data:image/png;base64," + img);
-                System.out.println("Post ID: " + getPost.getPostId() + ", Name: " + getPost.getPost_name());
-            }
-
-            List<CommentWrapper> commentWrappers = addCommentService.getCommentsByPostId(getPost.getPostId());
-            addPostData.setComments(commentWrappers);
-            System.out.println("This is My UserId "+user.getId()+"This is My Post Id "+getPost.getPostId() +"getting all comment "+commentWrappers.size());
-            List<LikeWrapper> likeWrappers=postLikeService.getLikesByPostId(getPost.getPostId());
-            addPostData.setLikes(likeWrappers);
-
-            postWrappers2.add(addPostData);
-            map.put("getPost", posts);
-            map.put("getUserId", user.getId());
-            map.put("username", user.getFirst_name() + " " + user.getLast_name());
-            map.put("user", user);
-        }
-        Map<String,Object> mapForPostWrapper=new HashMap<>();
-        mapForPostWrapper.put("getdataPost",postWrappers2);
-        if (acceptHeader.contains("application/json")) {
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(mapForPostWrapper);
-        } else {
-            String html = renderTemplate("homepage", map);
-            return ResponseEntity.ok()
-                    .contentType(MediaType.TEXT_HTML)
-                    .body(html);
-        }
-    }
+//    @GetMapping(value = "/homepage1",produces = {"application/json","text/html"})
+//    public ResponseEntity<Object> openHomePage(Map<String,Object> map, HttpSession session, @RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
+//        User user = (User) session.getAttribute("user");
+//        System.out.println(user.getId()+" afn afa adfqa");
+//            map.put("user", user);
+//            List<AddPost> posts=addPostService.findListOfPostData(user.getId());
+//        List<PostWrapper2> postWrappers2 = new ArrayList<>();
+//        for (AddPost getPost : posts) {
+//            PostWrapper2 addPostData = new PostWrapper2();
+//            addPostData.setPostId(getPost.getPostId());
+//            addPostData.setPost_name(getPost.getPost_name());
+//            addPostData.setLikesCount(getPost.getLikesCount());
+//            addPostData.setUserName(getPost.getUser().getFirst_name());
+//            addPostData.setImage_name(getPost.getImage_name());
+//            addPostData.setCaption(getPost.getCaption());
+//            if (getPost.getImage_data() != null) {
+//                String img = Base64.getEncoder().encodeToString(getPost.getImage_data());
+//                getPost.setImage_string_data("data:image/png;base64," + img);
+//                System.out.println("Post ID: " + getPost.getPostId() + ", Name: " + getPost.getPost_name());
+//            }
+//
+//            List<CommentWrapper> commentWrappers = addCommentService.getCommentsByPostId(getPost.getPostId());
+//            addPostData.setComments(commentWrappers);
+//            System.out.println("This is My UserId "+user.getId()+"This is My Post Id "+getPost.getPostId() +"getting all comment "+commentWrappers.size());
+//            List<LikeWrapper> likeWrappers=postLikeService.getLikesByPostId(getPost.getPostId());
+//            addPostData.setLikes(likeWrappers);
+//
+//            postWrappers2.add(addPostData);
+//            map.put("getPost", posts);
+//            map.put("getUserId", user.getId());
+//            map.put("username", user.getFirst_name() + " " + user.getLast_name());
+//            map.put("user", user);
+//        }
+//        Map<String,Object> mapForPostWrapper=new HashMap<>();
+//        mapForPostWrapper.put("getdataPost",postWrappers2);
+//        if (acceptHeader.contains("application/json")) {
+//            return ResponseEntity.ok()
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .body(mapForPostWrapper);
+//        } else {
+//            String html = renderTemplate("homepage", map);
+//            return ResponseEntity.ok()
+//                    .contentType(MediaType.TEXT_HTML)
+//                    .body(html);
+//        }
+//    }
 
     @GetMapping(value = "/homepage", produces = {"application/json", "text/html"})
     public ResponseEntity<Object> openHomePage1(HttpSession session, @RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
         User user = (User) session.getAttribute("user");
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-        }
-
-        System.out.println(user.getId() + " afn afa adfqa");
+        System.out.println(user.getId() + " afn afa adfqa" );
         System.out.println(user.getFirst_name() + " : " + user.getLast_name());
-
         Map<String, Object> map = new HashMap<>();
         map.put("user", user);
         map.put("getUserId", user.getId());
         map.put("username",user.getUserName());
-        map.put("usernames", user.getFirst_name() + " " + user.getLast_name()); // Add username
-
+        map.put("usernames", user.getFirst_name() + " " + user.getLast_name());
         List<AddPost> posts = addPostService.findListOfPostData(user.getId());
         List<PostWrapper2> postWrappers2 = new ArrayList<>();
         for (AddPost getPost : posts) {
@@ -118,13 +110,11 @@ public class GetForUserController {
                 getPost.setImage_string_data("data:image/png;base64," + img);
                 System.out.println("Post ID: " + getPost.getPostId() + ", Name: " + getPost.getPost_name());
             }
-
             List<CommentWrapper> commentWrappers = addCommentService.getCommentsByPostId(getPost.getPostId());
             addPostData.setComments(commentWrappers);
             System.out.println("This is My UserId " + user.getId() + "This is My Post Id " + getPost.getPostId() + "getting all comment " + commentWrappers.size());
             List<LikeWrapper> likeWrappers = postLikeService.getLikesByPostId(getPost.getPostId());
             addPostData.setLikes(likeWrappers);
-
             postWrappers2.add(addPostData);
             map.put("getPost", posts);
         }
@@ -134,7 +124,7 @@ public class GetForUserController {
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(map);
             } else {
-                String html = renderTemplate("homepage", map); // Ensure this method is correct
+                String html = renderTemplate("homepage", map);
                 return ResponseEntity.ok()
                         .contentType(MediaType.TEXT_HTML)
                         .body(html);
@@ -190,9 +180,8 @@ public class GetForUserController {
     public ResponseEntity<Object> getUserData(
             @PathVariable int id,
             HttpSession httpSession,
-            @RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader,
-            Map<String, Object> map) {
-
+            @RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
+        Map<String, Object> map=new HashMap<>();
         Optional<User> user = userServiceImp.getUserById(id);
             List<AddPost> posts = addPostService.findListOfPostData(id);
             List<PostWrapper2> postWrappers2 = new ArrayList<>();
@@ -248,7 +237,6 @@ public class GetForUserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Invalid reCAPTCHA. Please try again.");
         }
-
         Map<String, Object> map = new HashMap<>();
         User validUser = userServiceImp.loginUser(user.getEmail(), user.getPassword());
 
@@ -278,16 +266,15 @@ public class GetForUserController {
                     .body(map);
         } else {
             String redirectUrl = "/homepage";
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.LOCATION, redirectUrl);
-            return ResponseEntity.status(HttpStatus.FOUND)
-                    .headers(headers)
-                    .build();
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_HTML)
+                    .body(redirectUrl);
         }
     }
 
     @GetMapping(value = "/register",produces = {"application/json","text/html"})
-    public ResponseEntity<Object> openRegsitrationPage(Map<String,Object> map,@RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
+    public ResponseEntity<Object> openRegsitrationPage(@RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
+        Map<String,Object> map=new HashMap<>();
         map.put("user", new User());
         if (acceptHeader.contains("application/json")) {
             return ResponseEntity.ok()
@@ -302,7 +289,8 @@ public class GetForUserController {
     }
 
     @GetMapping(value = "/home" , produces = {"application/json","text/html"})
-    public ResponseEntity<Object> openHome(Map<String,Object> map,@RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
+    public ResponseEntity<Object> openHome(@RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
+        Map<String,Object> map=new HashMap<>();
         if (acceptHeader.contains("application/json")) {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
@@ -316,7 +304,8 @@ public class GetForUserController {
     }
 
     @GetMapping(value = "/login", produces = {"application/json", "text/html"})
-    public ResponseEntity<Object> openLoginPage(Map<String,Object> map, @RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
+    public ResponseEntity<Object> openLoginPage(@RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
+        Map<String,Object> map=new HashMap<>();
         map.put("user", new User());
         if (acceptHeader.contains("application/json")) {
             Map<String, String> responseMap = new HashMap<>();

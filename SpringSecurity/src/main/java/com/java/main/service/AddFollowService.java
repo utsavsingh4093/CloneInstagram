@@ -59,11 +59,9 @@ public class AddFollowService {
         } else {
             AddFollowers followEntry = existingFollowers.get(0);
             if (followEntry.getType() == AddFollowers.FollowType.FOLLOWING) {
-                // User is currently FOLLOWING, so set it to UNFOLLOW
                 followEntry.setType(AddFollowers.FollowType.UNFOLLOW);
-                addFollowRepo.save(followEntry); // Update the entry
+                addFollowRepo.save(followEntry);
             } else {
-                // User is currently UNFOLLOWING, so delete the entry
                 addFollowRepo.delete(followEntry);
             }
         }
