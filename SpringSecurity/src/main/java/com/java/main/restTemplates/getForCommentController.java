@@ -1,12 +1,10 @@
 package com.java.main.restTemplates;
 
+import com.java.main.dto.UserWrapper;
 import com.java.main.entity.AddPost;
 import com.java.main.entity.PostComment;
 import com.java.main.entity.User;
-import com.java.main.service.AddCommentService;
-import com.java.main.service.AddPostService;
-import com.java.main.service.PostLikeService;
-import com.java.main.service.UserServiceImp;
+import com.java.main.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,7 +27,8 @@ public class getForCommentController {
     AddPostService addPostService;
     @Autowired
     TemplateEngine templateEngine;
-
+    @Autowired
+    AddFollowService addFollowService;
     @PostMapping(value = "/comment", produces = {"application/json", "text/html"})
     public ResponseEntity<Object> addComment(@RequestParam Integer userId, @RequestParam Integer postId, @RequestParam String UserComment, @RequestParam String userName,
                                              @RequestHeader(value = HttpHeaders.ACCEPT, defaultValue = "text/html") String acceptHeader) {
@@ -73,22 +72,47 @@ public class getForCommentController {
         }
     }
     @PostMapping(value = "/commentOnUserProfile",produces = {"application/json","text/html"})
-    public ResponseEntity<Object> addCommentOnUserProfile(@RequestParam Integer userId,@RequestParam Integer postId,@RequestParam String comment,@RequestParam String userName,PostComment postComment,
+    public ResponseEntity<Object> addCommentOnUserProfile(@RequestParam Integer userId,@RequestParam Integer postId,@RequestParam String UserComment,@RequestParam String userName,
                                                           @RequestHeader(value = HttpHeaders.ACCEPT,defaultValue = "text/html")String acceptHeader)
     {
-        if (comment == null || comment.trim().isEmpty()) {
+        if (UserComment == null || UserComment.trim().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Comment can't be Null"));
         }
         Map<String,Object> map=new HashMap<>();
-        postComment.setComment(comment);
+        PostComment postComment = new PostComment();
+        postComment.setComment(UserComment);
         postComment.setUserName(userName);
         Optional<User> user=userServiceImp.getUserById(userId);
         List<AddPost> posts = addPostService.findListOfPost(userId);
         System.out.println("This is User ID : "+userId +" :  : ");
         System.out.println(userId+ " Here i am Getting my id");
         map.put("userId", userId);
+        map.put("user",user.get());
         map.put("username",user.get().getUserName());
         map.put("usernames",user.get().getFirst_name()+" "+user.get().getLast_name());
+        List<UserWrapper> followers = addFollowService.getAllFollowersByUserIds(user.get().getId());
+
+        List<UserWrapper> following=userServiceImp.getUserList();
+        System.out.println("Number of users fetched: " + following);
+
+        int followingCount = 0;//Both count following and unfollow
+
+        for(UserWrapper userWrapper : following){
+            if(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId())!=null){
+                userWrapper.setFollowType(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId()).getType().toString());
+                if (userWrapper.getFollowType().equals(User.FollowType.FOLLOWING.toString()) || userWrapper.getFollowType().equals((User.FollowType.UNFOLLOW.toString()))) {
+                    followingCount++;
+                }
+            }else{
+                userWrapper.setFollowType(User.FollowType.FOLLOW.toString());
+            }
+        }
+        System.out.println(followingCount +" YTHOsali ioaj a");
+        map.put("followingCount", followingCount);
+        map.put("postCount",posts.size());
+        map.put("user",user.get());
+        map.put("followersCount", followers.size());
+
         for (AddPost post : posts) {
             String img = Base64.getEncoder().encodeToString(post.getImage_data());
             post.setImage_string_data("data:image/png;base64,"+img);

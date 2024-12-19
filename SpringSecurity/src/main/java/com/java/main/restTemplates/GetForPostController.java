@@ -165,7 +165,7 @@ public class GetForPostController {
                 userWrapper.setFollowType(User.FollowType.FOLLOW.toString());
             }
         }
-        System.out.println(followingCount +" YTHOsali ioaj a");
+        System.out.println(followingCount +" This is my Following count");
         map.put("followingCount", followingCount);
         map.put("user",user.get());
         map.put("followersCount", followers.size());

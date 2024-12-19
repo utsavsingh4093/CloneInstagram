@@ -3,12 +3,10 @@ package com.java.main.restTemplates;
 import com.java.main.dto.CommentWrapper;
 import com.java.main.dto.LikeWrapper;
 import com.java.main.dto.PostWrapper2;
+import com.java.main.dto.UserWrapper;
 import com.java.main.entity.AddPost;
 import com.java.main.entity.User;
-import com.java.main.service.AddCommentService;
-import com.java.main.service.AddPostService;
-import com.java.main.service.PostLikeService;
-import com.java.main.service.UserServiceImp;
+import com.java.main.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,7 +29,7 @@ public class GetForLikeController {
     @Autowired
     private TemplateEngine templateEngine;
     @Autowired
-    private AddCommentService addCommentService;
+    AddFollowService addFollowService;
 
     @PostMapping(value = "/addLikes", produces = {"text/html","application/json"})
     public ResponseEntity<Object> addLike(@RequestPart AddPost post,
@@ -82,8 +80,35 @@ public class GetForLikeController {
         List<AddPost> posts = addPostService.findListOfPost(userId);
         System.out.println("This is User ID : " + userId + " :  : ");
         System.out.println(userId + " Here i am Getting my id");
-        map.put("userId", userId);
+        map.put("getUserId", userId);
+        map.put("getPost", posts);
+        map.put("user", user.orElse(null));
+        map.put("postId", postId);
         map.put("username", user.get().getFirst_name() + " " + user.get().getLast_name());
+
+        List<UserWrapper> followers = addFollowService.getAllFollowersByUserIds(user.get().getId());
+
+        List<UserWrapper> following=userServiceImp.getUserList();
+        System.out.println("Number of users fetched: " + following);
+
+        int followingCount = 0;//Both count following and unfollow
+
+        for(UserWrapper userWrapper : following){
+            if(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId())!=null){
+                userWrapper.setFollowType(addFollowService.getByUserAndFollowerId(userId,userWrapper.getId()).getType().toString());
+                if (userWrapper.getFollowType().equals(User.FollowType.FOLLOWING.toString()) || userWrapper.getFollowType().equals((User.FollowType.UNFOLLOW.toString()))) {
+                    followingCount++;
+                }
+            }else{
+                userWrapper.setFollowType(User.FollowType.FOLLOW.toString());
+            }
+        }
+        System.out.println(followingCount +" YTHOsali ioaj a");
+        map.put("followingCount", followingCount);
+        map.put("postCount",posts.size());
+        map.put("user",user.get());
+        map.put("followersCount", followers.size());
+
         for (AddPost post1 : posts) {
             String img = Base64.getEncoder().encodeToString(post1.getImage_data());
             post1.setImage_string_data("data:image/png;base64," + img);

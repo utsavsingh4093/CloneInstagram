@@ -46,7 +46,7 @@
             <!-- Flexbox container to align image and text side by side -->
             <div class="d-flex align-items-center">
                 <!-- Circular Image -->
-                <img th:src="@{/user/{id}/image(id=${user.id})}" alt="Profile"
+                <img th:src="@{/users/{id}/image(id=${user.id})}" alt="Profile"
                      style="border-radius: 50%; width: 40%; height: 100%; object-fit: cover;">
                 <div class="ml-3">
                     <h6>Followers: <span th:text="${followersCount}"></span></h6>
@@ -59,40 +59,39 @@
 </div>
 
 <!--<h1>Welcome <span th:text="${usernames}"></span></h1>-->
+<!--<h1><span th:text="${userId}"></span></h1>-->
 <div class="container mt-4">
     <h1 class="text-center my-4" style="color:blue;">This is Your Posts</h1>
     <div class="row justify-content-center">
         <div class="col-md-8">
-
-            <div class="row" th:each="post : ${addPost}">
-                <div class="col-md-12">
-                    <div class="card shadow-sm m-4">
-                        <img th:src="${post.image_string_data}" alt="Post Image" class="img-fluid mx-auto d-block" height="400px" width="400px">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${post.post_name}">Post Title</h5>
-                            <p class="card-text" style="text-align: center;" th:text="${post.caption}">This is a caption for the post.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <form class="likePostForm">
-                                        <input type="hidden" class="userId" th:value="${userId}" name="userId">
-                                        <input type="hidden" class="postId" th:value="${post.postId}" name="postId">
-                                        <span>Like</span>
-                                        <button type="submit" class="btn heart-btn" id="color">
-                                            <div class="heart"></div>
-                                            <span id="likesBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                                  th:text="${post.likesCount}" onload="checkLikes()"></span>
-                                        </button>
-                                    </form>
-                                </div>
-                                <form class="CommentOnPostForm">
-                                    <input type="hidden"  class="userId" th:value="${userId}" name="userId">
-                                    <input type="hidden" class="postId" th:value="${post.postId}" name="postId">
-                                    <input type="hidden" class="userName" th:value="${username}" name="userName">
-                                    <input type="text" name="comment" placeholder="Add a comment"  class="form-control me-2" required >
-                                <button type="submit" class="btn btn-sm btn-outline-secondary">Comment</button>
-                                </form>
-
-                                <!-- Comments Section -->
+                        <div class="row" th:each="post : ${addPost}">
+                            <div class="col-md-12">
+                                <div class="card shadow-sm m-4">
+                                    <img th:src="${post.image_string_data}" alt="Post Image" class="img-fluid mx-auto d-block" height="400px" width="400px">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${post.post_name}">Post Title</h5>
+                                        <p class="card-text" style="text-align: center;" th:text="${post.caption}">This is a caption for the post.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group">
+                                                <form class="likePostForm">
+                                                    <input type="hidden" class="userId" th:value="${user.id}" name="userId">
+                                                    <input type="hidden" class="postId" th:value="${post.postId}" name="postId">
+                                                    <button type="submit" class="btn heart-btn">
+                                                        <div class="heart"></div>
+                                                        <span class="badge bg-danger">
+                                                            <span th:text="${post.likesCount}"></span>
+                                                        </span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <form class="CommentOnPostForm">
+                                                <input type="hidden" class="userId" th:value="${userId}" name="userId">
+                                                <input type="hidden" class="postId" th:value="${post.postId}" name="postId">
+                                                <input type="hidden" class="userName" th:value="${username}" name="userName">
+                                                <input type="text" name="UserComment" placeholder="Add a comment" class="form-control me-2" required />
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Comment</button>
+                                            </form>
+                                            <!-- Comments Section -->
                                 <div>
                                     <p class="text-muted" th:text="${#lists.size(post.comments)} + ' Size Of Comments'">Comments Size</p>
                                     <form th:action="@{/AllComments}" method="get" class="d-inline">
@@ -137,65 +136,64 @@
         });
     });
 
-//new Like
+ //new Like
 document.addEventListener('DOMContentLoaded', function () {
-const forms = document.querySelectorAll('.likePostForm'); // Select all like forms
+    const forms = document.querySelectorAll('.likePostForm');
 
-forms.forEach(form => {
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();  // Prevent default form submission
+    forms.forEach(form => {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
 
-        if (!form.checkValidity()) {
-            form.classList.add('was-validated');
-            return;  // Stop if form validation fails
-        }
-
-        const formData = new FormData();
-
-        const post = {
-            postId: form.querySelector('.postId').value,  // Select fields from current form
-            user: {
-                id: form.querySelector('.userId').value
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
             }
-        };
 
-        formData.append('post', new Blob([JSON.stringify(post)], { type: 'application/json' }));
+            const formData = new FormData();
 
-        fetch('/addLikesOnUserPost', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Accept': 'text/html',
-            },
-        })
-        .then(response => {
-            if (response.ok) {
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('text/html')) {
-                    console.log('Post liked successfully.');
-                    return response.text().then(html => {
-                        document.open();
-                        document.write(html);
-                        document.close();
-                    });
-                } else {
-                    return response.json().then(data => {
-                        console.log('Post liked successfully:', data);
-                        alert(data.alert);
-                    });
+            const post = {
+                postId: form.querySelector('.postId').value,
+                user: {
+                    id: form.querySelector('.userId').value
                 }
-            } else {
-                throw new Error('Failed to like post');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while liking the post.');
+            };
+
+            formData.append('post', new Blob([JSON.stringify(post)], { type: 'application/json' }));
+
+            fetch('/addLikesOnUserPost', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'text/html',
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('text/html')) {
+                        console.log('Post liked successfully.');
+                        return response.text().then(html => {
+                            document.open();
+                            document.write(html);
+                            document.close();
+                        });
+                    } else {
+                        return response.json().then(data => {
+                            console.log('Post liked successfully:', data);
+                            alert(data.alert);
+                        });
+                    }
+                } else {
+                    throw new Error('Failed to like post');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while liking the post.');
+            });
         });
     });
 });
-});
-
 
 //Comment
 
