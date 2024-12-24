@@ -58,8 +58,6 @@
     </div>
 </div>
 
-<!--<h1>Welcome <span th:text="${usernames}"></span></h1>-->
-<!--<h1><span th:text="${userId}"></span></h1>-->
 <div class="container mt-4">
     <h1 class="text-center my-4" style="color:blue;">This is Your Posts</h1>
     <div class="row justify-content-center">
@@ -91,7 +89,6 @@
                                                 <input type="text" name="UserComment" placeholder="Add a comment" class="form-control me-2" required />
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary">Comment</button>
                                             </form>
-                                            <!-- Comments Section -->
                                 <div>
                                     <p class="text-muted" th:text="${#lists.size(post.comments)} + ' Size Of Comments'">Comments Size</p>
                                     <form th:action="@{/AllComments}" method="get" class="d-inline">
@@ -99,17 +96,6 @@
                                         <input type="hidden" class="postId" th:value="${post.postId}" name="postId">
                                         <button type="submit" class="nav-link btn btn-link">see All Comments</button>
                                     </form> <div>
-<!--                                    <p class="text-muted" th:text="${#lists.size(post.comments)} + ' Size Of Comments'">Comments Size</p>-->
-<!--                                    <form th:action="@{/AllComments}" method="get" class="d-inline">-->
-<!--                                        <input type="hidden"  class="userId" th:value="${userId}" name="userId">-->
-<!--                                        <input type="hidden" class="postId" th:value="${post.postId}" name="postId">-->
-<!--                                    <button type="button" class="btn btn-sm btn-outline-primary toggleCommentsBtn">See All Comments</button>-->
-<!--                                    <div class="comments" style="display: none;">-->
-<!--                                        <ul class="list-group mt-2" th:each="comm : ${post.comments}">-->
-<!--                                            <li class="list-group-item" th:text="${comm.comment}"></li>-->
-<!--                                            <span th:text="${comm.userName}" style="color:blue"></span>-->
-<!--                                        </ul>-->
-<!--                                    </div>-->
                                 </div>
                             </div>
                         </div>

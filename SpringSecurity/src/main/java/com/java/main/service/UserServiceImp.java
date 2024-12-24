@@ -23,6 +23,9 @@ public class UserServiceImp{
     public boolean isEmailUnique(String email) {
         return userRepository.findByEmail(email) == null;
     }
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
     public User registerUser(User user) throws IOException {
         try {
@@ -40,8 +43,9 @@ public class UserServiceImp{
         }
     }
     private boolean forSpaceChecking(String value) {
-        return value != null && value.contains(" ");
+        return value == null || value.trim().isEmpty();
     }
+
 
     public User updateUser(User user) {
         try {
@@ -61,21 +65,10 @@ public class UserServiceImp{
         return null;
     }
 
-//    public List<User> findListOfUser() {
-//        return userRepository.findAll();
-//    }
-
     public Optional<User> getUserById(int id) {
         return userRepository.findById(id);
     }
 
-//    public User getAllProductById(int id) {
-//        return null;
-//    }
-//
-//    public Optional<User> findById(int id) {
-//        return userRepository.findById(id);
-//    }
 
     public List<UserWrapper> getUserList()
     {
